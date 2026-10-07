@@ -56,3 +56,8 @@ Tanpa langkah ini, Papan Anugerah hanya menunjukkan profil dalam peranti yang sa
 
 ## Simpanan
 Kemajuan disimpan dalam pelayar setiap peranti. Gunakan **Tetapan → Sandaran simpanan → Eksport** untuk menyalin kemajuan, dan **Import** untuk memulihkannya di peranti lain.
+
+## Kredit fon
+- **Kurland** (teks dan dialog) oleh GGBotNet, dilesenkan di bawah SIL Open Font License 1.1 (https://scripts.sil.org/OFL). Fon ini dibenamkan dalam `index.html`.
+- **Raventure** (tajuk dan butang): sila semak syarat lesen di laman tempat fon ini dimuat turun.
+- **Noto Naskh Arabic** (tulisan Jawi) daripada Google Fonts, SIL Open Font License 1.1.
