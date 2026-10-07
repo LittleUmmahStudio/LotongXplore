@@ -32,5 +32,22 @@ Apabila `index.html` diganti dengan versi baharu, tukar juga `VERSI` di baris at
 3. Pasang semula melalui butang **📲 Pasang Game** atau menu Chrome → *Pasang aplikasi*.
 4. Jika game masih tidak bermula selepas 15 saat, skrin akan menunjukkan butang **Baiki & muat semula**. Butang ini membersihkan salinan lama dan memuat turun semula game.
 
+## Papan Anugerah Mingguan (dikongsi seluruh sekolah)
+Tanpa langkah ini, Papan Anugerah hanya menunjukkan profil dalam peranti yang sama. Supaya semua murid melihat papan yang sama:
+
+1. Buka [Google Sheets](https://sheets.google.com) dan cipta helaian baharu, contohnya **LO:TONG Papan Anugerah**.
+2. Pilih menu **Sambungan → Apps Script**. Padam kod sedia ada, kemudian tampal semua kandungan fail `papan-anugerah.gs`. Tekan **Simpan**.
+3. Tekan **Gunakan (Deploy) → Penggunaan baharu**. Pilih jenis **Aplikasi web**:
+   - *Laksanakan sebagai:* **Saya**
+   - *Siapa yang mempunyai akses:* **Sesiapa sahaja (Anyone)**
+4. Tekan **Gunakan**, benarkan akses akaun Google, dan salin **URL aplikasi web** (berakhir dengan `/exec`).
+5. Buka `index.html`, cari baris `const PAPAN_URL = '';` dan tampal URL itu di antara tanda petikan. Contoh:
+   `const PAPAN_URL = 'https://script.google.com/macros/s/XXXX/exec';`
+6. Muat naik `index.html` yang dikemas kini ke GitHub, dan tukar `VERSI` dalam `sw.js`.
+
+**Mengurus papan:** markah murid muncul dalam helaian **Pemain**. Untuk menyorok nama yang tidak sesuai, taip `ya` dalam lajur **sorok**. Murid juga boleh menyorok nama sendiri melalui **Tetapan → Nama di Papan Anugerah**.
+
+**Nota:** markah dihantar oleh peranti murid, jadi papan ini sesuai untuk motivasi, bukan untuk penilaian rasmi. Gunakan nama panggilan sahaja, bukan nama penuh.
+
 ## Simpanan
 Kemajuan disimpan dalam pelayar setiap peranti. Gunakan **Tetapan → Sandaran simpanan → Eksport** untuk menyalin kemajuan, dan **Import** untuk memulihkannya di peranti lain.

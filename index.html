@@ -196,6 +196,14 @@ body.kunci #joy,body.kunci #btnAct,body.kunci #btnLari{visibility:hidden}
 .kompas i{font-style:normal;color:#E8684F;font-size:13px}.kompas b{font-size:12px}
 body.peta #objektif{display:none}
 #objektif{pointer-events:auto;cursor:pointer}
+#papanAnugerah .kertas{width:min(560px,94vw);max-height:90vh;overflow-y:auto}
+#papanAnugerah h2{margin:0}
+#paTab{flex-wrap:wrap;gap:6px;margin:6px 0}#paTab .btn{min-height:36px;padding:3px 10px;font-size:14px}
+#paSenarai{list-style:none;margin:6px 0;padding:0;display:grid;gap:5px}
+.paBaris{display:grid;grid-template-columns:36px 1fr auto;align-items:center;gap:8px;border:3px solid #1B1B26;border-radius:6px;background:#fff;padding:4px 10px;box-shadow:3px 3px 0 #1B1B26}
+.paBaris.saya{background:#FFF4C2}
+.paNo{font-weight:700;font-size:18px;text-align:center}.paNama{font-weight:700}.paNilai{font-weight:700;color:#C9571E}
+.paKosong{padding:8px;font-style:italic}.paStatus{opacity:.7;font-size:12px}
 #sandaran .kertas{width:min(560px,94vw);max-height:90vh;overflow-y:auto}
 #sandaran h2{margin:0 0 6px}
 #sbTeks{width:100%;box-sizing:border-box;font-family:"Courier New",monospace;font-size:12px;border:3px solid #1B1B26;border-radius:6px;padding:6px;background:#fff;color:#1B1B26;resize:vertical;word-break:break-all}
@@ -280,6 +288,8 @@ body.teksBesar .snLangkah,body.teksBesar .snHariItem{font-size:16px}
 #miniJawi.susun .slotS.salah{background:#FFB3B3;animation:geleng .35s}
 #miniPilihan .btn.jubinS{font-size:13px;min-height:34px;padding:3px 10px;white-space:normal;max-width:48%}
 @media (max-width:600px){#miniJawi.susun{grid-template-columns:1fr}#miniPilihan .btn.jubinS{max-width:100%}}
+#miniPilihan.grid.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+#miniPilihan.grid.grid2 .btn{font-size:13px;white-space:normal;min-height:40px}
 #miniPilihan.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 #miniPilihan .btn.jawi-btn{font-family:"Noto Naskh Arabic",serif;font-size:26px;line-height:1.2;direction:rtl;min-width:60px;padding:2px 12px}
 #miniPilihan .btn.dipilih{background:#FFCC33;transform:translate(2px,2px);box-shadow:2px 2px 0 #1B1B26}
@@ -482,11 +492,28 @@ body.teksBesar .snLangkah,body.teksBesar .snHariItem{font-size:16px}
         <button id="btnSambung" class="btn utama">Sambung main</button>
         <button id="btnSenaraiJ" class="btn">Senarai tugasan</button>
         <button id="btnProfilJ" class="btn">Profil &amp; lencana</button>
+        <button id="btnAnugerahJ" class="btn">Papan Anugerah</button>
         <button id="btnPetaJ" class="btn">Lihat peta sekolah</button>
         <button id="btnSesat" class="btn">Saya sesat</button>
         <button id="btnTetapan" class="btn">Tetapan</button>
         <button id="btnMenu" class="btn">Simpan dan keluar ke menu</button>
       </div>
+    </div>
+  </section>
+  <section id="papanAnugerah" class="lapisan gelap panel-fokus" hidden role="dialog" aria-label="Papan Anugerah Mingguan">
+    <div class="kertas">
+      <h2>🏆 Papan Anugerah Mingguan</h2>
+      <p id="paMinggu" class="pfSub"></p>
+      <div id="paTab" class="baris-btn">
+        <button class="btn" data-tab="minggu">⭐ Mata minggu ini</button>
+        <button class="btn" data-tab="setia">🔥 Paling setia</button>
+        <button class="btn" data-tab="semua">👑 Sepanjang masa</button>
+      </div>
+      <ol id="paSenarai"></ol>
+      <p id="paSaya" class="pfSub"></p>
+      <p id="paLepas" class="pfSub"></p>
+      <p id="paStatus" class="pfSub paStatus"></p>
+      <div class="baris-btn"><button id="paMuat" class="btn">Muat semula</button><button id="paTutup" class="btn utama">Tutup</button></div>
     </div>
   </section>
   <section id="sandaran" class="lapisan gelap panel-fokus" hidden role="dialog" aria-label="Sandaran simpanan">
@@ -515,6 +542,7 @@ body.teksBesar .snLangkah,body.teksBesar .snHariItem{font-size:16px}
         <span>Bunyi suasana</span><button id="btnSuasana" class="btn" aria-pressed="true">Hidup</button>
         <span>Saiz teks</span><button id="btnTeks" class="btn" aria-pressed="false">Biasa</button>
         <span>Kesan fisheye</span><button id="btnFisheye" class="btn" aria-pressed="true">Hidup</button>
+        <span>Nama di Papan Anugerah</span><button id="btnPapanNama" class="btn" aria-pressed="true">Papar</button>
         <span>Sandaran simpanan</span><span class="sbBaris"><button id="btnEksport" class="btn">Eksport</button><button id="btnImport" class="btn">Import</button></span>
       </div>
       <div class="baris-btn"><button id="btnTetapanTutup" class="btn utama">Kembali</button></div>
@@ -534,6 +562,7 @@ body.teksBesar .snLangkah,body.teksBesar .snHariItem{font-size:16px}
         <button id="btnPilihWatak" class="btn">👦👧 Pilih Watak</button>
         <button id="btnCaraMain" class="btn">📖 Cara Main</button>
         <button id="btnAlmari" class="btn">🎒 Almari Saya</button>
+        <button id="btnAnugerah" class="btn">🏆 Papan Anugerah</button>
         <button id="btnTetapanMula" class="btn">⚙️ Tetapan</button>
         <button id="btnPasang" class="btn" hidden>📲 Pasang Game</button>
       </div>
@@ -550,6 +579,11 @@ body.teksBesar .snLangkah,body.teksBesar .snHariItem{font-size:16px}
         <label><input type="radio" name="watak" value="L" checked> 👦 Murid lelaki</label>
         <label><input type="radio" name="watak" value="P"> 👧 Murid perempuan</label>
       </fieldset>
+      <fieldset id="pilihSubjek">
+        <legend>Pelajaran agama atau moral</legend>
+        <label><input type="radio" name="subjek" value="pi" checked> 🕌 Pendidikan Islam</label>
+        <label><input type="radio" name="subjek" value="moral"> 🤝 Pendidikan Moral (murid bukan Islam)</label>
+      </fieldset>
       <fieldset id="pilihTahun">
         <legend>Kamu murid Tahun berapa?</legend>
         <label><input type="radio" name="tahun" value="1" checked><span>1</span></label>
@@ -559,6 +593,7 @@ body.teksBesar .snLangkah,body.teksBesar .snHariItem{font-size:16px}
         <label><input type="radio" name="tahun" value="5"><span>5</span></label>
         <label><input type="radio" name="tahun" value="6"><span>6</span></label>
       </fieldset>
+      <p class="pfSub">Nama ini akan dipaparkan di Papan Anugerah. Gunakan nama panggilan sahaja.</p>
       <p id="mulaRalat" class="ralat" aria-live="polite"></p>
       <div id="senaraiProfil"></div>
       <div class="baris-btn"><button id="btnWatakSiap" class="btn utama">Simpan</button></div>
@@ -698,11 +733,19 @@ const CONTENT = {
       papan: { rumi: 'Rumah Guru' }, masuk: 'rumah1' }
   ],
   // Pendidikan Islam tambahan. SEMAK GURU: tertib wuduk, urutan sirah dan teks hadis (terjemahan) serta sumbernya.
+  // Wuduk: disesuaikan daripada input guru PI (rukun & sunat wuduk). Tahap 1 = Tahun 1 hingga 3, Tahap 2 = Tahun 4 hingga 6.
   wuduk: {
-    penuh: ['Baca Bismillah dan basuh kedua-dua tapak tangan', 'Berkumur-kumur', 'Masukkan air ke hidung dan hembuskan', 'Berniat dan basuh muka',
-      'Basuh kedua-dua tangan hingga ke siku', 'Sapu sebahagian kepala', 'Sapu kedua-dua telinga', 'Basuh kedua-dua kaki hingga ke buku lali'],
-    ringkas: ['Baca Bismillah dan basuh kedua-dua tapak tangan', 'Berkumur-kumur', 'Berniat dan basuh muka', 'Basuh kedua-dua tangan hingga ke siku',
-      'Sapu sebahagian kepala', 'Basuh kedua-dua kaki hingga ke buku lali']
+    penuh: ['Baca Bismillah', 'Basuh kedua-dua tapak tangan hingga pergelangan', 'Berkumur-kumur', 'Masukkan air ke dalam hidung',
+      'Berniat dan basuh seluruh muka', 'Basuh kedua-dua tangan hingga ke siku (kanan dahulu)', 'Sapu sedikit kepala', 'Sapu kedua-dua telinga',
+      'Basuh kedua-dua kaki hingga ke buku lali (kanan dahulu)', 'Baca doa selepas wuduk'],
+    ringkas: ['Baca Bismillah dan basuh tapak tangan', 'Berkumur-kumur', 'Berniat dan basuh muka', 'Basuh tangan hingga ke siku',
+      'Sapu sedikit kepala', 'Basuh kaki hingga ke buku lali'],
+    niat: 'Sahaja aku berwuduk kerana Allah Ta‘ala.',
+    rukun: ['Rukun wuduk ada 6: niat, basuh muka, basuh tangan hingga ke siku, sapu sedikit kepala, basuh kaki hingga ke buku lali, dan tertib.',
+      'Tertib bermaksud melakukannya mengikut urutan, seperti yang kamu susun tadi!'],
+    sunat: ['Perkara sunat pula menambah pahala, contohnya membaca Bismillah, berkumur, memasukkan air ke dalam hidung, menyapu telinga, mendahulukan anggota kanan dan mengulang basuhan tiga kali.'],
+    muka: 'Muka dibasuh dari tempat tumbuh rambut hingga ke dagu, dan dari telinga kiri hingga ke telinga kanan.',
+    doaMaksud: 'Maksud doa selepas wuduk: “Aku bersaksi bahawa tiada Tuhan melainkan Allah yang Esa dan tiada sekutu bagi-Nya, dan aku bersaksi bahawa Nabi Muhammad itu hamba-Nya dan Rasul-Nya. Wahai Tuhanku, jadikan aku daripada golongan orang yang bertaubat dan orang yang bersih.”'
   },
   sirah: {
     penuh: ['Lahir di Makkah pada Tahun Gajah', 'Disusukan oleh Halimatus Saadiah', 'Berkahwin dengan Saidatina Khadijah', "Menerima wahyu pertama di Gua Hira'",
@@ -721,6 +764,85 @@ const CONTENT = {
     { teks: 'Pada setiap makhluk yang bernyawa ada pahala apabila kita berbuat baik kepadanya.', sumber: 'Hadis riwayat al-Bukhari dan Muslim' },
     { teks: 'Tunaikanlah amanah kepada orang yang mempercayaimu.', sumber: 'Hadis riwayat Abu Daud dan at-Tirmizi' },
     { teks: 'Tanda orang munafik ada tiga: apabila bercakap dia berdusta, apabila berjanji dia mungkiri, dan apabila diberi amanah dia khianati.', sumber: 'Hadis riwayat al-Bukhari dan Muslim' }
+  ],
+  // ===== Input guru PI (kedua): Rukun Islam, Rukun Iman, solat, Nabi & Rasul, doa harian, adab ibu bapa, Asmaul Husna =====
+  rukunIslam: [
+    { n: 'Mengucap dua kalimah syahadah', m: 'Mengaku bahawa tiada Tuhan selain Allah SWT dan Nabi Muhammad SAW ialah pesuruh Allah.' },
+    { n: 'Mendirikan solat fardu lima waktu', m: 'Menunaikan solat Subuh, Zohor, Asar, Maghrib dan Isyak setiap hari.' },
+    { n: 'Mengeluarkan zakat', m: 'Memberikan sebahagian harta kepada golongan yang berhak menerimanya, bagi yang cukup syarat.' },
+    { n: 'Berpuasa pada bulan Ramadan', m: 'Menahan diri daripada makan, minum dan perkara yang membatalkan puasa dari terbit fajar hingga terbenam matahari.' },
+    { n: 'Mengerjakan haji di Baitullah', m: 'Menunaikan ibadah haji bagi yang mampu dari segi tubuh badan dan wang.' }
+  ],
+  rukunIman: [
+    { n: 'Beriman kepada Allah', m: 'Yakin bahawa Allah SWT ialah Tuhan Yang Maha Esa dan pencipta sekalian alam.' },
+    { n: 'Beriman kepada malaikat', m: 'Percaya bahawa malaikat ialah makhluk suci yang taat dan diciptakan daripada cahaya.' },
+    { n: 'Beriman kepada kitab-kitab', m: 'Percaya kepada kitab yang diturunkan oleh Allah, iaitu Taurat, Zabur, Injil dan al-Quran.' },
+    { n: 'Beriman kepada rasul-rasul', m: 'Percaya kepada nabi dan rasul yang diutus untuk menyampaikan ajaran dan petunjuk kepada manusia.' },
+    { n: 'Beriman kepada hari akhirat', m: 'Percaya kepada hari kiamat, hari pembalasan dan kehidupan selepas mati.' },
+    { n: "Beriman kepada qada' dan qadar", m: 'Percaya kepada ketentuan dan takdir Allah SWT, sama ada baik atau buruk.' }
+  ],
+  solatFardu: [
+    { n: 'Subuh', r: 2, w: 'selepas terbit fajar hingga sebelum terbit matahari' },
+    { n: 'Zohor', r: 4, w: 'apabila matahari tergelincir dari tengah langit' },
+    { n: 'Asar', r: 4, w: 'apabila bayang-bayang sesuatu objek lebih panjang daripada objek itu' },
+    { n: 'Maghrib', r: 3, w: 'sejurus selepas matahari terbenam' },
+    { n: 'Isyak', r: 4, w: 'selepas hilang cahaya merah di langit sebelah barat' }
+  ],
+  nabi: ['Adam', 'Idris', 'Nuh', 'Hud', 'Soleh', 'Ibrahim', 'Luth', 'Ismail', 'Ishaq', 'Yaakub', 'Yusuf', 'Ayub', 'Syuaib', 'Musa', 'Harun',
+    'Zulkifli', 'Daud', 'Sulaiman', 'Ilyas', 'Ilyasa', 'Yunus', 'Zakaria', 'Yahya', 'Isa', 'Muhammad'],
+  ululAzmi: [
+    { n: 'Nuh', k: 'berdakwah selama 950 tahun dan tetap sabar walaupun ditolak oleh kaumnya, termasuk anak dan isterinya' },
+    { n: 'Ibrahim', k: 'tabah ketika dibakar oleh Raja Namrud dan diuji dengan perintah menyembelih anaknya, Nabi Ismail AS' },
+    { n: 'Musa', k: 'berani menentang kekejaman Firaun dan sabar memimpin Bani Israel' },
+    { n: 'Isa', k: 'dilahirkan tanpa bapa dan menghadapi pelbagai ancaman daripada kaum yang menentangnya' },
+    { n: 'Muhammad', k: 'menghadapi ujian paling besar ketika menyebarkan Islam, tetapi tetap pemaaf dan penyabar' }
+  ],
+  doaHarian: [
+    { bila: 'bangun tidur', rumi: "Al-hamdu lillahil-ladzi ahyana ba'da ma amatana wa ilaihin-nushur.", maksud: 'Segala puji bagi Allah yang telah menghidupkan kami sesudah kami mati (membangunkan kami) dan kepada-Nya kami dikembalikan.' },
+    { bila: 'sebelum tidur', rumi: 'Bismikal-lahumma ahya wa amut.', maksud: 'Dengan nama-Mu ya Allah, aku hidup dan aku mati.' },
+    { bila: 'keluar rumah', rumi: "Bismillahi tawakkaltu 'alallah, la hawla wa la quwwata illa billah.", maksud: 'Dengan nama Allah, aku bertawakal kepada Allah, tiada daya dan tiada kekuatan melainkan dengan pertolongan Allah.' },
+    { bila: 'masuk tandas', rumi: "Allahumma inni a'udzu bika minal-khubuthi wal-khaba'ith.", maksud: 'Ya Allah, aku berlindung kepada-Mu daripada gangguan syaitan jantan dan syaitan betina.' },
+    { bila: 'keluar tandas', rumi: 'Ghufranaka.', maksud: 'Aku memohon keampunan-Mu.' },
+    { bila: 'sebelum belajar', nama: 'Doa penerang hati', rumi: "Allahummaftah 'alaina hikmataka wansyur 'alaina min khaza'ini rahmatika ya arhamar rahimin.", maksud: 'Ya Allah, bukakanlah hikmah-Mu untuk kami dan limpahkanlah kepada kami rahmat-Mu.' },
+    { bila: 'memohon kebaikan dunia dan akhirat', nama: 'Doa kebaikan dunia dan akhirat (Surah al-Baqarah: 201)', rumi: "Rabbana atina fid-dunya hasanah, wa fil-akhirati hasanah, wa qina 'azaban-nar.", maksud: 'Ya Tuhan kami, berilah kami kebaikan di dunia dan kebaikan di akhirat, serta peliharalah kami daripada azab neraka.' }
+  ],
+  adabIbuBapa: [
+    { s: 'Ibu sedang bercakap dengan kamu. Bagaimanakah cara kamu menjawab?', j: 'Dengan suara yang lembut dan sopan', p: ['Dengan suara yang lembut dan sopan', 'Dengan suara yang kuat', 'Tidak menjawab'] },
+    { s: 'Kamu mahu bermain di rumah kawan. Apakah yang patut kamu lakukan dahulu?', j: 'Minta izin ibu bapa', p: ['Minta izin ibu bapa', 'Terus keluar rumah', 'Keluar senyap-senyap'] },
+    { s: 'Ayah sedang membersihkan halaman rumah. Apakah yang patut kamu lakukan?', j: 'Membantu ayah tanpa disuruh', p: ['Membantu ayah tanpa disuruh', 'Menonton televisyen', 'Bermain telefon'] },
+    { s: 'Bagaimanakah cara kita memanggil ibu bapa?', j: 'Dengan panggilan yang baik dan penuh hormat', p: ['Dengan panggilan yang baik dan penuh hormat', 'Dengan nama mereka sahaja', 'Dengan suara yang kasar'] },
+    { s: 'Ibu menyuruh kamu mengemas bilik. Apakah sikap yang betul?', j: 'Patuh dan segera mengemas', p: ['Patuh dan segera mengemas', 'Membantah dengan kasar', 'Buat-buat tidak dengar'] },
+    { s: 'Apakah amalan yang patut kita lakukan untuk ibu bapa setiap hari?', j: 'Mendoakan kesejahteraan mereka', p: ['Mendoakan kesejahteraan mereka', 'Meminta wang', 'Mengadu tentang kawan'] },
+    { s: 'Atuk dan nenek tinggal jauh di kampung. Apakah yang patut kita lakukan?', j: 'Menziarahi atau menghubungi mereka', p: ['Menziarahi atau menghubungi mereka', 'Melupakan mereka', 'Menunggu mereka datang sahaja'] }
+  ],
+  asmaulHusna: [
+    { r: 'Ar-Rahmaan', a: 'الرحمن', m: 'Maha Pengasih' }, { r: 'Ar-Rahim', a: 'الرحيم', m: 'Maha Penyayang' },
+    { r: 'Al-Malik', a: 'الملك', m: 'Maha Merajai' }, { r: 'Al-Quddus', a: 'القدوس', m: 'Maha Suci' },
+    { r: 'As-Salaam', a: 'السلام', m: 'Maha Penyelamat' }, { r: 'Al-Khaaliq', a: 'الخالق', m: 'Maha Pencipta' },
+    { r: 'Al-Ghaffaar', a: 'الغفار', m: 'Maha Pengampun' }, { r: 'Al-Wahhaab', a: 'الوهاب', m: 'Maha Pemberi' },
+    { r: 'Ar-Razzaaq', a: 'الرزاق', m: 'Maha Pemberi Rezeki' }, { r: "Al-'Aliim", a: 'العليم', m: 'Maha Mengetahui' },
+    { r: "As-Samii'", a: 'السميع', m: 'Maha Mendengar' }, { r: 'Al-Bashiir', a: 'البصير', m: 'Maha Melihat' },
+    { r: "Al-'Adl", a: 'العدل', m: 'Maha Adil' }, { r: 'Al-Hakiim', a: 'الحكيم', m: 'Maha Bijaksana' },
+    { r: 'Al-Kariim', a: 'الكريم', m: 'Maha Pemurah' }, { r: 'Al-Waduud', a: 'الودود', m: 'Maha Pencinta' },
+    { r: 'Al-Hay', a: 'الحي', m: 'Maha Hidup' }, { r: 'Al-Ahad', a: 'الأحد', m: 'Maha Tunggal' },
+    { r: 'At-Tawwaab', a: 'التواب', m: 'Maha Penerima Taubat' }, { r: 'Ash-Shabuur', a: 'الصبور', m: 'Maha Penyabar' }
+  ],
+  // ===== Pendidikan Moral (murid bukan Islam). SEMAK GURU: nilai, maksud dan situasi. =====
+  nilaiMoral: [
+    { n: 'Kepercayaan kepada Tuhan', m: 'yakin akan kewujudan Tuhan dan mematuhi ajaran agama masing-masing', c: 'Mei Ling bersyukur dan berdoa mengikut ajaran agamanya.' },
+    { n: 'Baik hati', m: 'suka menolong dan mengambil berat tentang orang lain', c: 'Ravi membantu rakan mengutip buku yang terjatuh.' },
+    { n: 'Bertanggungjawab', m: 'melaksanakan tugas dengan sempurna', c: 'Aina menyiapkan tugas kelas tanpa perlu diingatkan.' },
+    { n: 'Berterima kasih', m: 'menghargai pertolongan dan jasa orang lain', c: 'Daniel mengucapkan terima kasih kepada makcik kantin.' },
+    { n: 'Hemah tinggi', m: 'berbudi bahasa dan bersopan santun', c: 'Siti bercakap dengan lembut dan sopan kepada orang tua.' },
+    { n: 'Hormat', m: 'menghargai dan memuliakan orang lain', c: 'Kumar menyapa gurunya dengan sopan setiap pagi.' },
+    { n: 'Kasih sayang', m: 'perasaan sayang kepada keluarga, kawan, haiwan dan alam sekitar', c: 'Ah Kow memberi makan dan menjaga kucingnya dengan baik.' },
+    { n: 'Keadilan', m: 'bertindak adil dan saksama kepada semua orang', c: 'Farah membahagikan kek sama banyak kepada adik-adiknya.' },
+    { n: 'Keberanian', m: 'berani melakukan perkara yang betul', c: 'Jason berani mengaku kesalahannya kepada guru.' },
+    { n: 'Kejujuran', m: 'bercakap benar dan tidak menipu', c: 'Hana memulangkan dompet yang dijumpainya kepada pemiliknya.' },
+    { n: 'Kerajinan', m: 'berusaha bersungguh-sungguh dengan tekun', c: 'Arif mengulang kaji pelajaran setiap malam.' },
+    { n: 'Kerjasama', m: 'bekerja bersama-sama untuk mencapai matlamat', c: 'Murid Tahun 4 bergotong-royong membersihkan kelas.' },
+    { n: 'Kesederhanaan', m: 'bersikap sederhana dan tidak berlebih-lebihan', c: 'Lina mengambil makanan secukupnya dan tidak membazir.' },
+    { n: 'Toleransi', m: 'bersabar dan menghormati perbezaan orang lain', c: 'Murid-murid saling menghormati perayaan kawan yang berlainan agama.' }
   ],
   rujukanHadis: { m_sampah: 0, m_tegur: 2, m_jatuh: 4, m_iring: 4, m_kucing: 6, m_botol: 7, m_rumahguru: 7, m_janji: 8 },
   // Kemajuan: pangkat (ikut jumlah Kebaikan + Ilmu + Reputasi)
@@ -755,9 +877,14 @@ const CONTENT = {
     { id: 'tandas', nama: 'Bersih & Sihat', ikon: '🧼', syarat: 'Basuh tangan selepas ke tandas', kemajuan: () => [Kiraan.bil('tandas'), 1] },
     { id: 'pentas', nama: 'Pemidato Cilik', ikon: '🎤', syarat: 'Berucap di Speaker Corner 3 kali', kemajuan: () => [Kiraan.bil('pentas'), 3] },
     { id: 'jelajah', nama: 'Penjelajah Sekolah', ikon: '🗺️', syarat: 'Masuk 12 bilik yang berbeza', kemajuan: () => [Kiraan.bil('bilik'), 12] },
-    { id: 'wuduk', nama: 'Wuduk Sempurna', ikon: '💧', syarat: 'Susun langkah wuduk dengan betul 3 kali', kemajuan: () => [Kiraan.bil('wuduk'), 3] },
-    { id: 'sirah', nama: 'Pencinta Sirah', ikon: '🕌', syarat: 'Susun garis masa sirah 2 kali', kemajuan: () => [Kiraan.bil('sirah'), 2] },
-    { id: 'hadis', nama: 'Pembaca Hadis', ikon: '📖', syarat: 'Baca 5 hadis yang berbeza', kemajuan: () => [Kiraan.bil('hadis'), 5] }
+    { id: 'nilai', nama: 'Insan Bermoral', ikon: '🤝', syarat: 'Padankan nilai murni dengan betul 3 kali', kemajuan: () => [Kiraan.bil('nilai'), 3] },
+    { agama: true, id: 'wuduk', nama: 'Wuduk Sempurna', ikon: '💧', syarat: 'Susun langkah wuduk dengan betul 3 kali', kemajuan: () => [Kiraan.bil('wuduk'), 3] },
+    { agama: true, id: 'sirah', nama: 'Pencinta Sirah', ikon: '🕌', syarat: 'Susun garis masa sirah 2 kali', kemajuan: () => [Kiraan.bil('sirah'), 2] },
+    { agama: true, id: 'hadis', nama: 'Pembaca Hadis', ikon: '📖', syarat: 'Baca 5 hadis yang berbeza', kemajuan: () => [Kiraan.bil('hadis'), 5] },
+    { agama: true, id: 'doa', nama: 'Rajin Berdoa', ikon: '🤲', syarat: 'Pelajari 5 doa harian yang berbeza', kemajuan: () => [Kiraan.bil('doa'), 5] },
+    { agama: true, id: 'asma', nama: 'Mengenal Asmaul Husna', ikon: '✨', syarat: 'Baca 10 nama Allah yang berbeza', kemajuan: () => [Kiraan.bil('asma'), 10] },
+    { agama: true, id: 'rukun', nama: 'Asas Akidah', ikon: '🕋', syarat: 'Susun Rukun Islam dan Rukun Iman dengan betul', kemajuan: () => [(Kiraan.bil('rukunIslam') > 0 ? 1 : 0) + (Kiraan.bil('rukunIman') > 0 ? 1 : 0), 2] },
+    { agama: true, id: 'nabi', nama: 'Kenali Para Nabi', ikon: '📜', syarat: 'Susun nama nabi dan rasul 3 kali', kemajuan: () => [Kiraan.bil('nabi'), 3] }
   ],
   // RMT Lama (ikut lakaran): kawasan lapang berpagar + ruang tertutup di timur
   rmtLama: { x0: 9.6, x1: 28.6, z0: 2.5, z1: 14.0, zb: 10.0, stx0: 14.0, stx1: 14.0, kx0: 18.15, fx0: 24.4, fz1: 6.3,
@@ -1002,15 +1129,30 @@ const CONTENT = {
       ganjaran: { ilmu: 8, kebaikan: 2 },
       maklumBalas: 'Kamu tekun mencari dan belajar. Ilmu yang dicari dengan sabar sangat berharga.', rujukan: '' },
 
-    { id: 'm_wuduk', tajuk: 'Langkah Wuduk', pemberi: 'ustazah', syarat: ['m_kenal'], ulang: true, rehat: 240, nilai: 'Menjaga kebersihan diri',
+    { id: 'm_nilai', tajuk: 'Nilai Murni', pemberi: 'cikgu', syarat: ['m_kenal'], ulang: true, rehat: 240, nilai: 'Nilai murni',
+      dialogMula: ['Nilai murni menjadikan kita insan yang baik.', 'Padankan setiap situasi dengan nilai yang ditunjukkan.'],
+      langkah: [{ jenis: 'permainan', permainan: 'nilai', npc: 'cikgu', objektif: 'Padankan nilai murni bersama Cikgu Kelas' }],
+      ganjaran: { ilmu: 5, kebaikan: 1 }, maklumBalas: 'Kamu mengenal nilai murni. Amalkannya setiap hari di sekolah dan di rumah.', rujukan: '' },
+
+    { agama: true, id: 'm_wuduk', tajuk: 'Langkah Wuduk', pemberi: 'ustazah', syarat: ['m_kenal'], ulang: true, rehat: 240, nilai: 'Menjaga kebersihan diri',
       dialogMula: ['Sebelum solat, kita mesti mengambil wuduk.', 'Cuba susun langkah wuduk mengikut tertib yang betul.'],
       langkah: [{ jenis: 'permainan', permainan: 'wuduk', npc: 'ustazah', objektif: 'Susun langkah wuduk bersama Ustazah' }],
-      ganjaran: { ilmu: 6, kebaikan: 1 }, maklumBalas: 'Wuduk yang sempurna membersihkan diri sebelum menghadap Allah.', rujukan: '' },
+      ganjaran: { ilmu: 6, kebaikan: 1 }, maklumBalas: 'Rukun wuduk ada 6: niat, basuh muka, basuh tangan hingga ke siku, sapu sedikit kepala, basuh kaki hingga ke buku lali, dan tertib. Wuduk yang sempurna membersihkan diri sebelum menghadap Allah.', rujukan: '' },
 
-    { id: 'm_sirah', tajuk: 'Garis Masa Sirah', pemberi: 'ustazah', syarat: ['m_kenal'], ulang: true, rehat: 300, nilai: 'Mencintai Rasulullah',
+    { agama: true, id: 'm_sirah', tajuk: 'Garis Masa Sirah', pemberi: 'ustazah', syarat: ['m_kenal'], ulang: true, rehat: 300, nilai: 'Mencintai Rasulullah',
       dialogMula: ['Mari kita kenali kisah hidup Nabi Muhammad SAW.', 'Susun peristiwa-peristiwa ini mengikut urutan masa.'],
       langkah: [{ jenis: 'permainan', permainan: 'sirah', npc: 'ustazah', objektif: 'Susun garis masa sirah bersama Ustazah' }],
       ganjaran: { ilmu: 6 }, maklumBalas: 'Mengenali kisah Rasulullah menjadikan kita lebih mencintai dan mencontohi baginda.', rujukan: '' },
+
+    { agama: true, id: 'm_rukun', tajuk: 'Rukun Islam dan Iman', pemberi: 'ustazah', syarat: ['m_kenal'], ulang: true, rehat: 240, nilai: 'Mengukuhkan akidah',
+      dialogMula: ['Rukun Islam ada 5 dan Rukun Iman ada 6.', 'Cuba susun mengikut tertib yang betul.'],
+      langkah: [{ jenis: 'permainan', permainan: 'rukun', npc: 'ustazah', objektif: 'Susun rukun bersama Ustazah' }],
+      ganjaran: { ilmu: 6 }, maklumBalas: 'Mengenal Rukun Islam dan Rukun Iman ialah asas menjadi Muslim yang baik.', rujukan: '' },
+
+    { agama: true, id: 'm_asma', tajuk: 'Mengenal Asmaul Husna', pemberi: 'ustazah', syarat: ['m_kenal'], ulang: true, rehat: 240, nilai: 'Mencintai Allah',
+      dialogMula: ['Allah mempunyai nama-nama yang indah, iaitu Asmaul Husna.', 'Padankan nama Allah dengan maksudnya.'],
+      langkah: [{ jenis: 'permainan', permainan: 'asma', npc: 'ustazah', objektif: 'Padankan Asmaul Husna bersama Ustazah' }],
+      ganjaran: { ilmu: 6 }, maklumBalas: 'Semakin kita mengenal nama-nama Allah, semakin kita mencintai-Nya.', rujukan: '' },
 
     { id: 'm_padan', tajuk: 'Padan Jawi-Rumi', pemberi: 'ustazah', syarat: ['m_kenal'], ulang: true, rehat: 200, nilai: 'Menuntut ilmu',
       dialogMula: ['Mari berlatih memadankan perkataan Jawi dengan bacaannya.'],
@@ -1141,11 +1283,22 @@ const CONTENT = {
   },
   subjek: {
     bm: { nama: 'Bahasa Melayu' }, mt: { nama: 'Matematik' }, sn: { nama: 'Sains' },
-    bi: { nama: 'Bahasa Inggeris' }, pi: { nama: 'Pendidikan Islam', bilik: 'pi' }
+    bi: { nama: 'Bahasa Inggeris' }, pi: { nama: 'Pendidikan Islam', bilik: 'pi' }, moral: { nama: 'Pendidikan Moral' }
   },
   // Bank soalan kelas (s = soalan, j = jawapan betul, p = pilihan). Matematik dijana mengikut Tahun.
   // SEMAK GURU: soalan Pendidikan Islam.
   soalan: {
+    moral: [
+      { s: 'Kamu terjumpa wang di bawah meja kelas. Apakah tindakan kamu?', j: 'Serahkan kepada guru', p: ['Serahkan kepada guru', 'Simpan untuk diri sendiri', 'Biarkan sahaja'] },
+      { s: 'Kawan kamu terjatuh di padang. Apakah yang patut kamu lakukan?', j: 'Membantu dan bertanya keadaannya', p: ['Membantu dan bertanya keadaannya', 'Mentertawakannya', 'Terus bermain'] },
+      { s: 'Kawan kamu menyambut perayaan yang berbeza daripada kamu. Apakah sikap kamu?', j: 'Menghormati dan mengucapkan selamat', p: ['Menghormati dan mengucapkan selamat', 'Mengejek perayaannya', 'Tidak mahu berkawan'] },
+      { s: 'Kamu terpecahkan pasu bunga di kelas. Apakah yang patut kamu lakukan?', j: 'Mengaku dan meminta maaf', p: ['Mengaku dan meminta maaf', 'Menyalahkan kawan', 'Diam dan lari'] },
+      { s: 'Apakah yang patut kamu ucapkan apabila menerima hadiah?', j: 'Terima kasih', p: ['Terima kasih', 'Itu sahaja?', 'Tiada apa-apa'] },
+      { s: 'Kelas kamu kotor selepas aktiviti. Apakah yang patut dilakukan?', j: 'Bergotong-royong membersihkannya', p: ['Bergotong-royong membersihkannya', 'Biarkan pekerja membersihkannya', 'Keluar dari kelas'] },
+      { s: 'Bagaimanakah cara mengambil makanan di majlis?', j: 'Ambil secukupnya dan habiskan', p: ['Ambil secukupnya dan habiskan', 'Ambil sebanyak mungkin', 'Ambil dan buang'] },
+      { s: 'Apakah ucapan yang sesuai apabila bertemu guru pada waktu pagi?', j: 'Selamat pagi, cikgu', p: ['Selamat pagi, cikgu', 'Hai!', 'Tidak perlu menegur'] },
+      { s: 'Guru memberi kerja rumah. Bilakah kamu patut menyiapkannya?', j: 'Sebelum tarikh yang ditetapkan', p: ['Sebelum tarikh yang ditetapkan', 'Bila-bila masa sahaja', 'Tidak perlu siap'] }
+    ],
     bm: [
       { s: 'Pilih ejaan yang betul.', j: 'sekolah', p: ['sekolah', 'sekula', 'sekolh'] },
       { s: 'Apakah lawan bagi perkataan "besar"?', j: 'kecil', p: ['kecil', 'tinggi', 'panjang'] },
@@ -1184,7 +1337,7 @@ const CONTENT = {
       { s: 'Nabi terakhir ialah Nabi ___.', j: 'Muhammad SAW', p: ['Muhammad SAW', 'Isa AS', 'Musa AS'] },
       { s: 'Berapakah rakaat solat Subuh?', j: '2', p: ['2', '3', '4'] },
       { s: 'Berapakah rakaat solat Maghrib?', j: '3', p: ['3', '2', '4'] },
-      { s: 'Berapakah rakaat solat Zuhur?', j: '4', p: ['4', '2', '3'] },
+      { s: 'Berapakah rakaat solat Zohor?', j: '4', p: ['4', '2', '3'] },
       { s: 'Rumah ibadat umat Islam ialah ___.', j: 'masjid', p: ['masjid', 'pasar', 'perpustakaan'] },
       { s: 'Hari raya selepas bulan Ramadan ialah ___.', j: 'Hari Raya Aidilfitri', p: ['Hari Raya Aidilfitri', 'Hari Raya Aidiladha', 'Hari Kebangsaan'] },
       { s: 'Ketika solat, kita menghadap ke arah ___.', j: 'kiblat', p: ['kiblat', 'matahari', 'pintu'] },
@@ -1201,7 +1354,11 @@ const CONTENT = {
       { s: 'Ketika membasuh muka semasa berwuduk, kita juga perlu ___.', j: 'berniat', p: ['berniat', 'berlari', 'bercakap'] },
       { s: 'Ketika berwuduk, tangan dibasuh hingga ke ___.', j: 'siku', p: ['siku', 'bahu', 'jari'] },
       { s: 'Ketika berwuduk, kaki dibasuh hingga ke ___.', j: 'buku lali', p: ['buku lali', 'lutut', 'jari kaki'] },
-      { s: 'Anggota wuduk yang disapu (bukan dibasuh) ialah ___.', j: 'kepala', p: ['kepala', 'muka', 'tangan'] }
+      { s: 'Anggota wuduk yang disapu (bukan dibasuh) ialah ___.', j: 'kepala', p: ['kepala', 'muka', 'tangan'] },
+      { s: 'Berapakah bilangan rukun wuduk?', j: '6', p: ['6', '4', '5'] },
+      { s: 'Melakukan langkah wuduk mengikut urutan dipanggil ___.', j: 'tertib', p: ['tertib', 'sunat', 'niat'] },
+      { s: 'Ketika berwuduk, kita mendahulukan anggota yang ___.', j: 'kanan', p: ['kanan', 'kiri', 'kotor'] },
+      { s: 'Antara berikut, yang manakah perkara SUNAT ketika berwuduk?', j: 'Berkumur-kumur', p: ['Berkumur-kumur', 'Membasuh muka', 'Membasuh kaki hingga buku lali'] }
     ]
   },
   // Bahan untuk menjana soalan tambahan secara automatik (lebih banyak variasi, kurang berulang)
@@ -1229,8 +1386,8 @@ const CONTENT = {
   },
   // Peralatan bilik (fakta & teks). SEMAK GURU: adab dan doa tandas.
   adabTandas: {
-    masuk: ['Masuk dengan kaki kiri dan baca doa masuk tandas.', 'Doa: Allahumma inni a\'uzu bika minal khubuthi wal khaba\'ith.'],
-    keluar: ['Selesai. Jangan lupa pam tandas.', 'Keluar dengan kaki kanan dan baca: Ghufranaka.', 'Kemudian basuh tangan dengan sabun di sinki.']
+    masuk: ['Masuk dengan kaki kiri dan baca doa masuk tandas.', 'Doa: Allahumma inni a\'udzu bika minal-khubuthi wal-khaba\'ith.', 'Maksud: Ya Allah, aku berlindung kepada-Mu daripada gangguan syaitan jantan dan syaitan betina.'],
+    keluar: ['Selesai. Jangan lupa pam tandas.', 'Keluar dengan kaki kanan dan baca: Ghufranaka.', 'Maksud: Aku memohon keampunan-Mu.', 'Kemudian basuh tangan dengan sabun di sinki.']
   },
   alat: {
     mikroskop: ['Daun mempunyai banyak sel kecil yang tersusun rapat.', 'Setitis air kolam mengandungi hidupan seni yang sangat kecil.', 'Sehelai rambut kelihatan seperti batang yang bersisik apabila dibesarkan.', 'Kulit bawang terdiri daripada sel-sel yang tersusun seperti batu bata.'],
@@ -1241,9 +1398,16 @@ const CONTENT = {
     ucapan: [
       { tajuk: 'Jaga kebersihan sekolah', teks: ['Assalamualaikum dan salam sejahtera, kawan-kawan.', 'Sekolah yang bersih membuat kita selesa belajar.', 'Mari buang sampah ke dalam tong, ya!'] },
       { tajuk: 'Hormati guru dan kawan', teks: ['Assalamualaikum dan salam sejahtera, kawan-kawan.', 'Guru mendidik kita dengan ikhlas. Kawan pula menemani kita setiap hari.', 'Mari kita bercakap dengan sopan dan saling membantu.'] },
+      { tajuk: 'Hormati ibu bapa', teks: ['Assalamualaikum dan salam sejahtera, kawan-kawan.', 'Ibu bapa menjaga kita sejak kecil dengan penuh kasih sayang.', 'Mari bercakap dengan lembut, minta izin sebelum keluar, bantu kerja rumah dan doakan mereka setiap hari.'] },
       { tajuk: 'Jimat air', teks: ['Assalamualaikum dan salam sejahtera, kawan-kawan.', 'Air bersih sangat berharga.', 'Tutup paip selepas digunakan dan minum air secukupnya setiap hari.'] }
     ],
-    kisah: ['Kisah teladan: Seorang budak memulangkan dompet yang dijumpainya. Kejujurannya dipuji semua orang.', 'Kisah teladan: Dua sahabat saling membantu ketika banjir. Persahabatan mereka bertambah erat.', 'Kisah teladan: Seorang murid sentiasa memberi salam kepada gurunya. Gurunya sangat menyayanginya.'],
+    ucapanIbuBapa: { tajuk: 'Hormati ibu bapa', teks: ['Assalamualaikum dan salam sejahtera, kawan-kawan.', 'Ibu bapa menjaga kita sejak kecil dengan penuh kasih sayang.', 'Mari bercakap dengan lembut, minta izin sebelum keluar, bantu kerja rumah dan doakan mereka setiap hari.'] },
+    kisah: [
+      'Kisah Rasul Ulul Azmi: Nabi Nuh AS berdakwah selama 950 tahun dan tetap sabar walaupun ramai yang menolak, termasuk anak dan isterinya sendiri.',
+      'Kisah Rasul Ulul Azmi: Nabi Ibrahim AS tetap tabah ketika dibakar oleh Raja Namrud. Baginda juga diuji dengan perintah menyembelih anaknya, Nabi Ismail AS.',
+      'Kisah Rasul Ulul Azmi: Nabi Musa AS berani menentang kekejaman Firaun dan sabar memimpin Bani Israel.',
+      'Kisah Rasul Ulul Azmi: Nabi Isa AS dilahirkan tanpa bapa dan diuji dengan pelbagai ancaman daripada kaum yang menentangnya.',
+      'Kisah Rasul Ulul Azmi: Nabi Muhammad SAW menghadapi ujian paling besar ketika menyebarkan Islam, namun baginda tetap pemaaf dan penyabar.', 'Kisah teladan: Seorang budak memulangkan dompet yang dijumpainya. Kejujurannya dipuji semua orang.', 'Kisah teladan: Dua sahabat saling membantu ketika banjir. Persahabatan mereka bertambah erat.', 'Kisah teladan: Seorang murid sentiasa memberi salam kepada gurunya. Gurunya sangat menyayanginya.'],
     tv: ['Rancangan dokumentari tentang penyu di pantai Terengganu.', 'Berita cuaca: esok cuaca cerah dan panas.', 'Rancangan memasak: cara membuat kuih seri muka.']
   },
   // Bina suku kata / Cari Huruf (SEMAK GURU: ejaan & pemenggalan suku kata Jawi)
@@ -1378,7 +1542,9 @@ const Save = {
     d.bilik = Rooms.current || null;
     if (Player.lantai) { const g = Lantai.groundPos(Player.lantai); d.pos = [g.x, g.z]; } else if (!d.bilik) d.pos = [Player.pos.x, Player.pos.z];
     d.yaw = Cam.yaw;
+    Anugerah.catat();
     const all = this.readAll(); all[d.nama] = d; this.writeAll(all);
+    Anugerah.hantar();
   },
   remove(nama) { const all = this.readAll(); delete all[nama]; this.writeAll(all); }
 };
@@ -2138,6 +2304,15 @@ const World = {
     pk.position.set(gx - 2.7, 1.75, -fz - 0.52); pk.rotation.y = Math.PI; scene.add(pk);
     this.road(5.2, 12, '#CFC6B4', gx, -fz - 6.2, 0.05);
     // tiang bendera: Malaysia & Sabah
+    { // papan kenyataan Anugerah Mingguan
+      const bx = 2.2, bz = -50.9;
+      [-0.95, 0.95].forEach((dx) => this.box(bx + dx, bz, 0.12, 0.12, 2.4, '#7A5236'));
+      this.box(bx, bz - 0.05, 2.3, 0.1, 1.5, '#7A5236', { y: 0.85, collide: false });
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(2.1, 1.35), new THREE.MeshBasicMaterial({ map: boardTex([{ t: '🏆 Anugerah Mingguan', s: 34, c: '#C9571E' }], '#FFFDF2') }));
+      m.position.set(bx, 1.6, bz + 0.01); scene.add(m); Anugerah.papan3D = m;
+      this.colliders.push({ minX: bx - 1.1, maxX: bx + 1.1, minZ: bz - 0.15, maxZ: bz + 0.1 });
+      this.aksiLuar.push({ pos: { x: bx, z: bz + 0.9 }, verb: 'Lihat', kata: 'Lihat Papan Anugerah', jarak: 1.6, fn: () => Anugerah.buka() });
+    }
     this.bendera(13.9, -54.7, benderaMalaysiaTex(), 6.6); this.bendera(14.9, -54.7, benderaSabahTex(), 6.0);
     // palang keselamatan (terangkat)
     const pal = this.box(gx - 1.2, -fz + 0.6, 2.6, 0.12, 0.12, '#E8684F', { y: 1.0, collide: false }); pal.rotation.z = 0.5;
@@ -2585,6 +2760,10 @@ const LAYOUT = {
     A.act(-4.1, 1.6, 'Baca', 'Baca buku kisah teladan', () => Peralatan.kisah(), 1.3);
     A.wall('e', -3.0, 1.65, 1.5, 1.1, boardTex([{ t: 'Hadis Pilihan', s: 34, c: '#2F8F4E' }, { t: 'Baca setiap hari', s: 24 }], '#FFFDF2'));
     A.act(4.2, -3.0, 'Baca', 'Baca papan hadis', () => Peralatan.hadis(), 1.4);
+    A.wall('n', 2.9, 1.65, 1.5, 1.1, boardTex([{ t: 'Doa Harian', s: 36, c: '#2F8F4E' }, { t: 'Amalkan setiap hari', s: 24 }], '#FFFDF2'));
+    A.act(2.9, -3.2, 'Baca', 'Baca papan doa harian', () => Peralatan.doa(), 1.4);
+    A.wall('n', -2.9, 1.65, 1.5, 1.1, boardTex([{ t: 'الأسماء الحسنى', jawi: true, s: 40 }, { t: 'Asmaul Husna', s: 28, c: '#2F8F4E' }], '#FFFDF2'));
+    A.act(-2.9, -3.2, 'Baca', 'Baca papan Asmaul Husna', () => Peralatan.asma(), 1.4);
     A.wall('w', -3.0, 1.65, 1.3, 1.1, posterTex('Garis masa sirah', '#FFD27A', '🕌'));
     A.act(-4.2, -3.0, 'Susun', 'Susun garis masa sirah', () => Peralatan.sirah(), 1.4);
     const seats = [];
@@ -2951,7 +3130,8 @@ const Rooms = {
   },
   makan(t) {
     const doa = CONTENT.doaMakan, r = this.list.rmt;
-    Dialog.show('Doa sebelum makan', [doa.rumi, 'Maksudnya: ' + doa.maksud], { onDone: () => {
+    const baris = Agama.moral() ? ['Ucapkan terima kasih atas rezeki makanan ini.', 'Makan dengan tertib dan jangan membazir.'] : [doa.rumi, 'Maksudnya: ' + doa.maksud];
+    Dialog.show(Agama.moral() ? 'Sebelum makan' : 'Doa sebelum makan', baris, { onDone: () => {
       Player.pos.set(r.ox + t.x, 0, r.oz + t.z); Player.face = t.arah; Player.sync(); Player.duduk(true);
       setLock('makan'); toast('Nyam nyam... makan dengan tertib.');
       setTimeout(() => {
@@ -3395,6 +3575,31 @@ const Soalan = {
       const fn = B.deria.map((x) => x[1]); B.deria.forEach(([o, f]) => tambah('dr:' + o, 'Organ ' + o + ' digunakan untuk ___.', f, lain(fn, f)));
       const kp = B.keperluan.map((x) => x[1]); B.keperluan.forEach(([q, a]) => tambah('kp:' + q, q, a, lain(kp, a)));
     }
+    if (sub === 'moral') {
+      const NM = CONTENT.nilaiMoral, nn = NM.map((x) => x.n);
+      NM.forEach((x) => { L.push({ k: 'nm:' + x.n, s: '"' + x.c + '" Ini menunjukkan nilai ___.', j: x.n, salah: lain(nn, x.n), min: 1 }); L.push({ k: 'nmm:' + x.n, s: 'Nilai yang bermaksud ' + x.m + ' ialah ___.', j: x.n, salah: lain(nn, x.n), min: 3 }); });
+      CONTENT.adabIbuBapa.forEach((x, i) => L.push({ k: 'ib:' + i, s: x.s, j: x.j, p: x.p, min: 1 }));
+    }
+    if (sub === 'pi') {
+      const T = (k, sq, j, salah, min) => L.push({ k, s: sq, j, salah, min: min || 1 });
+      const RI = CONTENT.rukunIslam, RM = CONTENT.rukunIman, SF = CONTENT.solatFardu, N = CONTENT.nabi, UA = CONTENT.ululAzmi, D = CONTENT.doaHarian, AH = CONTENT.asmaulHusna;
+      const nb = (n) => 'Nabi ' + n + (n === 'Muhammad' ? ' SAW' : ' AS');
+      RI.forEach((x, i) => { T('ri:' + i, 'Rukun Islam yang ke-' + (i + 1) + ' ialah ___.', x.n, lain(RI.map((y) => y.n), x.n)); T('rim:' + i, '"' + x.m + '" Ini ialah Rukun Islam yang mana?', x.n, lain(RI.map((y) => y.n), x.n), 3); });
+      RM.forEach((x, i) => { T('rm:' + i, 'Rukun Iman yang ke-' + (i + 1) + ' ialah ___.', x.n, lain(RM.map((y) => y.n), x.n)); T('rmm:' + i, '"' + x.m + '" Ini ialah Rukun Iman yang mana?', x.n, lain(RM.map((y) => y.n), x.n), 3); });
+      T('rm:malaikat', 'Malaikat diciptakan oleh Allah daripada ___.', 'cahaya', ['api', 'tanah']);
+      T('rm:kitab', 'Antara berikut, yang manakah kitab yang diturunkan oleh Allah?', 'Zabur', ['Hikayat', 'Kamus'], 2);
+      SF.forEach((x) => { if (x.n === 'Asar' || x.n === 'Isyak') T('sr:' + x.n, 'Berapakah rakaat solat ' + x.n + '?', String(x.r), ['2', '3', '4'].filter((v) => v !== String(x.r))); T('sw:' + x.n, 'Solat yang dilakukan ' + x.w + ' ialah solat ___.', x.n, lain(SF.map((y) => y.n), x.n), 3); });
+      T('sf:lima', 'Solat fardu lima waktu ialah Subuh, Zohor, Asar, Maghrib dan ___.', 'Isyak', ['Dhuha', 'Tarawih']);
+      T('nb:pertama', 'Nabi yang pertama ialah ___.', nb('Adam'), [nb('Nuh'), nb('Ibrahim')]);
+      T('nb:bil', 'Berapakah bilangan nabi dan rasul yang wajib kita ketahui?', '25', ['20', '30'], 2);
+      N.slice(0, -1).forEach((n, i) => T('nbs:' + n, 'Nabi selepas ' + nb(n) + ' ialah ___.', nb(N[i + 1]), lain(N.map(nb), nb(N[i + 1])), 4));
+      UA.forEach((x) => T('ua:' + x.n, 'Rasul Ulul Azmi yang ' + x.k + ' ialah ___.', nb(x.n), lain(UA.map((y) => nb(y.n)), nb(x.n)), 3));
+      T('ua:bil', 'Berapakah bilangan Rasul Ulul Azmi?', '5', ['4', '6'], 3);
+      UA.forEach((x) => T('uaa:' + x.n, 'Antara berikut, yang manakah Rasul Ulul Azmi?', nb(x.n), N.filter((n) => !UA.some((u) => u.n === n)).map(nb), 4));
+      D.forEach((x, i) => { T('dh:' + i, 'Doa "' + x.rumi + '" dibaca ketika ___.', x.bila, lain(D.map((y) => y.bila), x.bila)); T('dhm:' + i, 'Apakah maksud doa ketika ' + x.bila + '?', x.maksud, lain(D.map((y) => y.maksud), x.maksud), 4); });
+      CONTENT.adabIbuBapa.forEach((x, i) => L.push({ k: 'ib:' + i, s: x.s, j: x.j, p: x.p, min: 1 }));
+      AH.forEach((x) => { T('ah:' + x.r, 'Apakah maksud nama Allah ' + x.r + '?', x.m, lain(AH.map((y) => y.m), x.m), 3); T('ahr:' + x.r, 'Nama Allah yang bermaksud "' + x.m + '" ialah ___.', x.r, lain(AH.map((y) => y.r), x.r), 4); });
+    }
     if (sub === 'pi' || sub === 'jawi') {
       const P = CONTENT.jawi.perkataan, rumi = P.map((x) => x.r);
       P.forEach((w) => tambah('jw:' + w.j, 'Apakah bacaan perkataan ' + w.j + '?', w.r, lain(rumi, w.r)));
@@ -3407,8 +3612,9 @@ const Soalan = {
   ambil(sub, tahun) {
     if (sub === 'mt') return this.matematik(tahun || 1);
     const L = this.bina(sub), guna = this.guna(sub);
-    let calon = L.filter((q) => !guna.includes(q.k));
-    if (!calon.length) { guna.splice(0, Math.max(0, guna.length - 6)); calon = L.filter((q) => !guna.includes(q.k)); }
+    const th = tahun || Kelas.tahun(), layak = (q) => (q.min || 1) <= th;
+    let calon = L.filter((q) => layak(q) && !guna.includes(q.k));
+    if (!calon.length) { guna.splice(0, Math.max(0, guna.length - 6)); calon = L.filter((q) => layak(q) && !guna.includes(q.k)); }
     const akhir = (this.akhirTeks = this.akhirTeks || {})[sub] = this.akhirTeks[sub] || [];
     const segar = calon.filter((q) => !akhir.includes(q.s)); if (segar.length) calon = segar;
     const q = calon[Math.floor(Math.random() * calon.length)];
@@ -3478,13 +3684,15 @@ const Kelas = {
     for (let i = 0; i < J.slot.length; i++) {
       const [a, b] = J.slot[i];
       if (j >= toMin(a) && j < toMin(b)) {
-        const sid = (J.tahun[this.tahun()] || J.tahun[1])[i], info = CONTENT.subjek[sid] || { nama: sid };
+        let sid = (J.tahun[this.tahun()] || J.tahun[1])[i]; if (sid === 'pi' && Agama.moral()) sid = 'moral';
+        const info = CONTENT.subjek[sid] || { nama: sid };
         return { i, subjek: sid, info, bilik: info.bilik === 'pi' ? 'pi' : 'k' + this.tahun() };
       }
     }
     return null;
   },
   pasAktif() { return !!this.slot() && this.K.siap; },
+  permainanPI() { const t = this.tahun(); return ['huruf', 'perkataan', 'padan', 'bina', 'wuduk', 'sirah', 'rukun'].concat(t >= 3 ? ['asma'] : []).concat(t >= 4 ? ['nabi'] : []); },
   namaBilik(id) { return (CONTENT.dalaman[id] || {}).nama || id; },
   tempat(id) { return id === 'pi' ? { pos: [0.4, 1.6], arah: Math.PI, meja: [1.7, 1.1] } : { pos: [0.2, 0.95], arah: Math.PI, meja: [1.1, 0.5] }; },
   guru(s) {
@@ -3506,6 +3714,11 @@ const Kelas = {
     const dalam = Rooms.current === s.bilik;
     if (dalam && !K.dalam) {
       K.dalam = true; K.cd = 2.5;
+      const hh = State.data.hari;
+      if (hh && !hh.doaBelajar && !State.uiLock && !Agama.moral()) {
+        hh.doaBelajar = true; const dp = CONTENT.doaHarian.find((x) => x.bila === 'sebelum belajar'), g0 = this.guru(s);
+        if (dp) { K.cd = 4; setTimeout(() => { if (!State.uiLock) Dialog.show(g0 ? g0.nama : 'Cikgu', ['Sebelum belajar, mari kita baca doa penerang hati bersama-sama.', dp.rumi, 'Maksud: ' + dp.maksud], { tag: dp.nama }); }, 400); }
+      }
       if (!K.tepat && !K.siap && jam - K.mula <= 8) { K.tepat = true; State.data.stats.reputasi += 1; HUD.stats({ reputasi: 1 }); toast('Tepat pada masanya! +1 Reputasi'); }
       HUD.objective();
     }
@@ -3562,7 +3775,8 @@ const Kelas = {
       } })) });
       tanya(Soalan.ambil(sub, tahun));
     } else if (K.akt.jenis === 'kerja') {
-      if (sub === 'pi') Mini.open(['huruf', 'perkataan', 'padan', 'bina', 'wuduk', 'sirah'][Math.floor(Math.random() * 6)], () => this.selesai('kerja', { ilmu: 3 }));
+      if (sub === 'pi') Mini.open(Kelas.permainanPI()[Math.floor(Math.random() * Kelas.permainanPI().length)], () => this.selesai('kerja', { ilmu: 3 }));
+      else if (sub === 'moral' && Math.random() < 0.5) Mini.open('nilai', () => this.selesai('kerja', { ilmu: 3 }));
       else Mini.openSoalan('Latihan ' + s.info.nama, [0, 1, 2].map(() => { const q = Soalan.ambil(sub, tahun); return { soalan: q.s, betul: q.j, pilihan: q.p }; }), () => this.selesai('kerja', { ilmu: 3 }));
     } else {
       const q = Soalan.ambil(sub === 'pi' ? 'jawi' : sub, tahun);
@@ -3875,10 +4089,31 @@ const Peralatan = {
   },
   komputer() { this.fakta('Komputer', CONTENT.alat.komputer, 'komputer'); },
   pengumuman() { Dialog.show('Papan kenyataan', CONTENT.alat.pengumuman.slice()); },
-  kisah() { this.fakta('Buku kisah teladan', CONTENT.alat.kisah, 'kisah'); },
-  wuduk() { Mini.open('wuduk', () => { this.ganjaran('wuduk', { ilmu: 1 }, 'Wuduk sempurna! +1 Ilmu'); Dialog.show('Ambil wuduk', ['Wuduk kamu sempurna. Kamu bersih dan bersedia untuk solat.', 'Selepas berwuduk, bacalah doa selepas wuduk.']); }); },
-  sirah() { Mini.open('sirah', () => { this.ganjaran('sirah', { ilmu: 1 }); Dialog.show('Tahukah kamu?', [this.pilih(CONTENT.sirah.fakta)], { tag: 'Sirah' }); }); },
+  kisah() { this.fakta('Buku kisah teladan', Agama.moral() ? CONTENT.alat.kisah.filter((k) => !k.startsWith('Kisah Rasul')) : CONTENT.alat.kisah, 'kisah'); },
+  wuduk() { if (Agama.moral()) { Dialog.show('Tempat berwuduk', ['Rakan Muslim menggunakan sinki ini untuk berwuduk sebelum solat.', 'Kita hormati amalan setiap agama.'], { tag: 'Toleransi' }); return; } Mini.open('wuduk', () => { this.ganjaran('wuduk', { ilmu: 1 }, 'Wuduk sempurna! +1 Ilmu'); Dialog.show('Ambil wuduk', this.pelajaranWuduk(), { tag: 'Wuduk' }); }); },
+  // Ringkasan pelajaran selepas menyusun langkah wuduk (Tahap 1 lebih ringkas)
+  pelajaranWuduk() {
+    const w = CONTENT.wuduk, t2 = Kelas.tahun() >= 4;
+    const a = ['Wuduk kamu sempurna. Kamu bersih dan bersedia untuk solat.', 'Lafaz niat wuduk: “' + w.niat + '”'].concat(w.rukun);
+    return t2 ? a.concat([w.muka]).concat(w.sunat).concat([w.doaMaksud]) : a.concat(['Selepas berwuduk, bacalah doa selepas wuduk.']);
+  },
+  sirah() { if (Agama.moral()) return Agama.bilikPI(); Mini.open('sirah', () => { this.ganjaran('sirah', { ilmu: 1 }); Dialog.show('Tahukah kamu?', [this.pilih(CONTENT.sirah.fakta)], { tag: 'Sirah' }); }); },
+  doa() {
+    if (Agama.moral()) return Agama.bilikPI();
+    const D = CONTENT.doaHarian, dibaca = (Kiraan.d() || {}).doa || {};
+    const belum = D.map((_, i) => i).filter((i) => !dibaca[i]), i = belum.length ? belum[Math.floor(Math.random() * belum.length)] : Math.floor(Math.random() * D.length);
+    Kiraan.set('doa', i); const x = D[i];
+    Dialog.show('Doa Harian', [(x.nama || 'Doa ' + x.bila) + ':', x.rumi, 'Maksud: ' + x.maksud], { tag: 'Doa ' + x.bila, onDone: () => this.ganjaran('doa', { ilmu: 1 }, 'Kamu mempelajari doa harian. +1 Ilmu') });
+  },
+  asma() {
+    if (Agama.moral()) return Agama.bilikPI();
+    const A2 = CONTENT.asmaulHusna, dibaca = (Kiraan.d() || {}).asma || {};
+    const belum = A2.map((_, i) => i).filter((i) => !dibaca[i]), i = belum.length ? belum[Math.floor(Math.random() * belum.length)] : Math.floor(Math.random() * A2.length);
+    Kiraan.set('asma', i); const x = A2[i];
+    Dialog.show('Asmaul Husna', [x.a, x.r + ': ' + x.m + '.'], { tag: 'Nama-nama Allah', onDone: () => this.ganjaran('asma', { ilmu: 1 }, 'Kamu mengenal nama Allah. +1 Ilmu') });
+  },
   hadis() {
+    if (Agama.moral()) return Agama.bilikPI();
     const H = CONTENT.hadis, dibaca = (Kiraan.d() || {}).hadis || {};
     const belum = H.map((_, i) => i).filter((i) => !dibaca[i]), i = belum.length ? belum[Math.floor(Math.random() * belum.length)] : Math.floor(Math.random() * H.length);
     Kiraan.set('hadis', i);
@@ -3916,7 +4151,7 @@ const Peralatan = {
 
 const Tandas = {
   guna() {
-    const a = CONTENT.adabTandas;
+    const a = Agama.moral() ? { masuk: ['Ketuk pintu dahulu dan pastikan tandas kosong.'], keluar: ['Selesai. Jangan lupa pam tandas.', 'Pastikan tandas bersih untuk pengguna seterusnya.', 'Kemudian basuh tangan dengan sabun di sinki.'] } : CONTENT.adabTandas;
     Dialog.show('Adab ke tandas', a.masuk, { tag: 'Adab', onDone: () => Rooms.fade(() => {
       Ambient.fire('air'); State.perluBasuh = true;
       Dialog.show('Adab ke tandas', a.keluar, { tag: 'Adab' });
@@ -4277,6 +4512,8 @@ window.addEventListener('keydown', (e) => {
   const k = (e.key || '').toLowerCase();
   if (k === '`' || e.key === 'F3') { Debug.toggle(); e.preventDefault(); return; }
   if (k === 'escape' && !$('sandaran').hidden) { Sandaran.tutup(); return; }
+  if (k === 'escape' && !$('papanAnugerah').hidden) { Anugerah.tutup(); return; }
+  if (State.uiLock === 'anugerah') return;
   if (State.mode === 'menu' && k === 'escape') { if (!$('tetapan').hidden) Tetapan.tutup(); Menu.tutup(); return; }
   if (State.mode !== 'play') return;
   if (k === 't' && Debug.on && Hari.aktif() && !State.uiLock) { State.data.hari.jam += 15; toast('Debug: jam dipercepat 15 minit'); return; }
@@ -4650,6 +4887,7 @@ const Missions = {
   npcLangkah(st) { if (!st) return null; if (st.npc) return st.npc; const m = this.semasa(); return (st.jenis === 'kembali' || st.jenis === 'pilih') && m ? m.pemberi : null; },
   available(m, abaikanPenuh) {
     const d = State.data; if (!d) return false;
+    if (m.agama && Agama.moral()) return false;
     if (!abaikanPenuh && this.penuh()) return false;
     if (this.semua().some((a) => a.id === m.id)) return false;
     if (!(m.syarat || []).every((s) => d.selesai[s])) return false;
@@ -4979,7 +5217,7 @@ function doInteract() {
       Dialog.show('Rumah Guru', ['Ini rumah guru.', 'Murid perlu minta izin guru, atau ada tugasan, sebelum masuk.']);
       return;
     }
-    Rooms.enter(c.id, Izin.rumah(c.id) ? () => toast('Assalamualaikum! Masuk dengan sopan.') : null);
+    Rooms.enter(c.id, Izin.rumah(c.id) ? () => toast(Agama.teks('Assalamualaikum! Masuk dengan sopan.')) : null);
   }
   else if (c.kind === 'kelas') Kelas.buat();
   else if (c.kind === 'makan') Rooms.makan(c.ref);
@@ -5083,6 +5321,7 @@ const Dialog = {
   show(nama, lines, opts) {
     this.lines = (lines && lines.length ? lines : ['…']).slice(); this.i = 0; this.opts = opts || {};
     $('dlgNama').textContent = nama; Ekspresi.angguk(nama);
+    if (Agama.moral()) this.lines = this.lines.map((t) => Agama.teks(t));
     const tag = $('dlgTag'); tag.textContent = this.opts.tag || ''; tag.hidden = !this.opts.tag;
     $('dialog').hidden = false; setLock('dialog'); this.render(); Sound.play('talk');
   },
@@ -5125,8 +5364,18 @@ const Mini = {
     this.mod = 'pilih'; $('miniPilihan').classList.remove('grid'); $('miniJawi').hidden = false; $('miniJawi').classList.remove('susun'); $('miniJawi').setAttribute('dir', 'rtl');
     if (jenis === 'padan') return this.openPadan(onFinish);
     if (jenis === 'bina') return this.openBina(this.pusinganBina(3), 'Bina Suku Kata', onFinish);
-    if (jenis === 'wuduk') { const w = CONTENT.wuduk; return this.openSusun('wuduk', 'Susun Langkah Wuduk', 'Tekan langkah wuduk mengikut tertib yang betul.', Kelas.tahun() <= 2 ? w.ringkas : w.penuh, onFinish); }
+    if (jenis === 'wuduk') { const w = CONTENT.wuduk; return this.openSusun('wuduk', 'Susun Langkah Wuduk', 'Tekan langkah wuduk mengikut tertib yang betul.', Kelas.tahun() <= 3 ? w.ringkas : w.penuh, onFinish); }
     if (jenis === 'sirah') { const r = CONTENT.sirah; return this.openSusun('sirah', 'Garis Masa Sirah', 'Susun peristiwa hidup Nabi Muhammad SAW mengikut urutan masa.', Kelas.tahun() <= 2 ? r.ringkas : r.penuh, onFinish); }
+    if (jenis === 'rukun') {
+      const islam = Math.random() < 0.5, R = islam ? CONTENT.rukunIslam : CONTENT.rukunIman;
+      return this.openSusun(islam ? 'rukunIslam' : 'rukunIman', islam ? 'Susun Rukun Islam' : 'Susun Rukun Iman', 'Tekan mengikut tertib, bermula dengan yang pertama.', R.map((x) => x.n), onFinish);
+    }
+    if (jenis === 'nabi') {
+      const N = CONTENT.nabi, mula = Kelas.tahun() <= 3 ? 0 : Math.floor(Math.random() * (N.length - 6 + 1));
+      return this.openSusun('nabi', 'Susun Nabi dan Rasul', 'Susun nama nabi ini mengikut urutan (' + (mula + 1) + ' hingga ' + (mula + 6) + ' daripada 25).', N.slice(mula, mula + 6).map((n) => 'Nabi ' + n + (n === 'Muhammad' ? ' SAW' : ' AS')), onFinish);
+    }
+    if (jenis === 'asma') return this.openPadan(onFinish, 'asma');
+    if (jenis === 'nilai') { const r = this.openPadan(onFinish, 'nilai'); $('miniPilihan').classList.add('grid2'); return r; }
     if (jenis === 'susunHuruf') { const a = State.data.aktif, w = CONTENT.binaKata[(a && a.kata) || 0]; return this.openBina(this.pusinganSusun(w), 'Susun Kad Huruf', onFinish); }
     this.onFinish = onFinish; this.i = 0; this.skor = 0; $('miniJawi').classList.remove('teks');
     if (jenis === 'perkataan') {
@@ -5160,11 +5409,22 @@ const Mini = {
     $('miniJawi').classList.remove('susun'); $('miniJawi').setAttribute('dir', 'rtl');
     $('mini').hidden = false; setLock('mini');
   },
-  openPadan(onFinish) {
+  openPadan(onFinish, jenis) {
+    this.jenisP = jenis || 'jawi'; $('miniPilihan').classList.remove('grid2');
     this.mod = 'padan'; this.onFinish = onFinish; this.salahPadan = 0; this.dipilih = null; this.jodoh = 0;
+    if (jenis === 'nilai') {
+      const P = shuffle(CONTENT.nilaiMoral.slice()).slice(0, 4);
+      this.kad = shuffle(P.map((w, i) => ({ id: i, teks: w.c, jawi: false })).concat(P.map((w, i) => ({ id: i, teks: w.n, jawi: false, maksud: true }))));
+      this.sediaUI('Padan Nilai Murni', 'Tekan situasi, kemudian nilai yang ditunjukkan.'); $('miniJawi').hidden = true; this.jenisP = 'nilai';
+    } else if (jenis === 'asma') {
+      const P = shuffle(CONTENT.asmaulHusna.slice()).slice(0, 4);
+      this.kad = shuffle(P.map((w, i) => ({ id: i, teks: w.r, jawi: false })).concat(P.map((w, i) => ({ id: i, teks: w.m, jawi: false, maksud: true }))));
+      this.sediaUI('Padan Asmaul Husna', 'Tekan nama Allah, kemudian maksudnya.'); $('miniJawi').hidden = true;
+    } else {
     const P = shuffle(CONTENT.jawi.perkataan.slice()).slice(0, 4);
     this.kad = shuffle(P.map((w, i) => ({ id: i, teks: w.j, jawi: true })).concat(P.map((w, i) => ({ id: i, teks: w.r, jawi: false }))));
     this.sediaUI('Padan Jawi-Rumi', 'Tekan perkataan Jawi, kemudian bacaan rumi yang sepadan.'); $('miniJawi').hidden = true;
+    }
     const box = $('miniPilihan'); box.classList.add('grid');
     this.kad.forEach((k) => {
       const b = document.createElement('button'); b.className = 'btn' + (k.jawi ? ' jawi-btn' : ''); b.textContent = k.teks; k.el = b;
@@ -5177,10 +5437,11 @@ const Mini = {
     if (!a) { this.dipilih = k; k.el.classList.add('dipilih'); return; }
     this.dipilih = null; a.el.classList.remove('dipilih');
     if (a === k) return;
-    if (a.id === k.id && a.jawi !== k.jawi) {
+    if (a.id === k.id && (a.jawi !== k.jawi || !!a.maksud !== !!k.maksud)) {
       a.siap = k.siap = true; [a, k].forEach((x) => { x.el.classList.add('betul'); x.el.disabled = true; });
       Sound.play('ok'); this.jodoh++;
-      const j = a.jawi ? a : k, r = a.jawi ? k : a; $('miniMaklum').textContent = 'Betul! ' + j.teks + ' = ' + r.teks;
+      const j = (a.jawi || (!a.maksud && k.maksud)) ? a : k, r = j === a ? k : a; $('miniMaklum').textContent = 'Betul! ' + j.teks + ' = ' + r.teks;
+      if (this.jodoh >= 4 && this.jenisP === 'nilai') Kiraan.tambah('nilai');
       if (this.jodoh >= 4) this.timer = setTimeout(() => { this.timer = null; this.tamat('Semua padanan betul!', this.salahPadan ? 'Silap: ' + this.salahPadan + ' kali. Teruskan berlatih!' : 'Hebat, tanpa sebarang silap!'); }, 700);
     } else {
       this.salahPadan++; Sound.play('wrong'); $('miniMaklum').textContent = 'Belum sepadan. Cuba lagi!';
@@ -5323,7 +5584,7 @@ const Reward = {
     Player.gembira = 0.9;
     $('rwTajuk').textContent = m.tajuk; $('rwTeks').textContent = m.maklumBalas || '';
     $('rwNilai').textContent = 'Nilai: ' + (m.nilai || '');
-    const rj = $('rwRujukan'); rj.textContent = m.rujukan || ''; rj.hidden = !m.rujukan;
+    const rj = $('rwRujukan'), ru = Agama.moral() ? '' : (m.rujukan || ''); rj.textContent = ru; rj.hidden = !ru;
     const box = $('rwDapat'); box.innerHTML = ''; const g = m.ganjaran || {};
     [['kebaikan', 'Kebaikan'], ['ilmu', 'Ilmu'], ['reputasi', 'Reputasi']].forEach(([k, l]) => {
       if (g[k]) { const s = document.createElement('span'); s.textContent = `+${g[k]} ${l}`; box.appendChild(s); }
@@ -5456,7 +5717,7 @@ const Lencana = {
     const d = State.data; if (!d) return;
     const baru = d.lencana == null; d.lencana = d.lencana || {};
     for (const L of CONTENT.lencana) {
-      if (d.lencana[L.id]) continue;
+      if (d.lencana[L.id] || (L.agama && Agama.moral())) continue;
       if (L.kemajuan()[0] >= L.kemajuan()[1]) {
         d.lencana[L.id] = Hari.aktif() ? 'h' + d.hari.ke : 1;
         if (!senyap && !baru) {
@@ -5526,7 +5787,7 @@ const Profil = {
   tutup() { if ($('profil').hidden) return; $('profil').hidden = true; if (State.uiLock === 'profil') setLock(null); },
   lukis() {
     const d = State.data, P = CONTENT.pangkat, m = Pangkat.jumlah(), i = Pangkat.indeks(m), seterus = P[i + 1];
-    $('pfNama').textContent = d.nama + ' · Tahun ' + (d.tahun || 1);
+    $('pfNama').textContent = d.nama + ' · Tahun ' + (d.tahun || 1) + ' · ' + (d.subjek === 'moral' ? 'Pendidikan Moral' : 'Pendidikan Islam');
     $('pfPangkat').textContent = P[i].ikon + ' ' + P[i].nama;
     $('pfMata').textContent = 'Jumlah mata: ' + m + ' (Kebaikan ' + d.stats.kebaikan + ' · Ilmu ' + d.stats.ilmu + ' · Reputasi ' + d.stats.reputasi + ')';
     const k = seterus ? (m - P[i].min) / (seterus.min - P[i].min) : 1;
@@ -5535,7 +5796,7 @@ const Profil = {
     const tg = $('pfTangga'); tg.innerHTML = '';
     P.forEach((p, k2) => { const s = document.createElement('span'); s.className = k2 <= i ? 'dapat' : ''; s.textContent = p.ikon + ' ' + p.nama; tg.appendChild(s); });
     const lg = $('pfLencana'); lg.innerHTML = '';
-    CONTENT.lencana.forEach((L) => {
+    CONTENT.lencana.filter((L) => !(L.agama && Agama.moral())).forEach((L) => {
       const ada = d.lencana && d.lencana[L.id], [n, t] = L.kemajuan();
       const c = document.createElement('div'); c.className = 'pfL' + (ada ? ' ada' : '');
       c.innerHTML = '<b></b><span></span><small></small>';
@@ -5615,7 +5876,7 @@ $('objektif').addEventListener('click', () => Senarai.buka());
 
 /* ===================== Tetapan pemain (disimpan dalam pelayar) ===================== */
 const Tetapan = {
-  s: { sens: 1, sfx: true, suasana: true, teks: false, fisheye: true },
+  s: { sens: 1, sfx: true, suasana: true, teks: false, fisheye: true, papan: true },
   muat() { try { Object.assign(this.s, JSON.parse(localStorage.getItem('jejakKebaikan.tetapan') || '{}')); } catch (e) {} this.s.sens = clamp(+this.s.sens || 1, 0.4, 2); this.guna(); },
   simpan() { try { localStorage.setItem('jejakKebaikan.tetapan', JSON.stringify(this.s)); } catch (e) {} },
   guna() {
@@ -5630,6 +5891,7 @@ const Tetapan = {
     $('btnTeks').textContent = this.s.teks ? 'Besar' : 'Biasa'; $('btnTeks').setAttribute('aria-pressed', String(this.s.teks));
     $('btnFisheye').textContent = hm(this.s.fisheye); $('btnFisheye').setAttribute('aria-pressed', String(this.s.fisheye));
     $('inSens').value = this.s.sens; $('nilaiSens').textContent = this.s.sens.toFixed(1) + '×';
+    $('btnPapanNama').textContent = this.s.papan !== false ? 'Papar' : 'Sorok'; $('btnPapanNama').setAttribute('aria-pressed', String(this.s.papan !== false));
   },
   tukar(k) { this.s[k] = !this.s[k]; this.simpan(); this.guna(); if (k === 'sfx' && this.s.sfx) { Sound.init(); Sound.play('pick'); } },
   buka() { $('jeda').hidden = true; $('tetapan').hidden = false; this.label(); $('btnTetapanTutup').focus(); },
@@ -5639,6 +5901,7 @@ $('btnSfx').addEventListener('click', () => Tetapan.tukar('sfx'));
 $('btnSuasana').addEventListener('click', () => Tetapan.tukar('suasana'));
 $('btnTeks').addEventListener('click', () => Tetapan.tukar('teks'));
 $('btnFisheye').addEventListener('click', () => Tetapan.tukar('fisheye'));
+$('btnPapanNama').addEventListener('click', () => { Tetapan.s.papan = Tetapan.s.papan === false; Tetapan.simpan(); Tetapan.label(); if (Tetapan.s.papan) Anugerah.hantar(true); else Anugerah.padam(); });
 $('inSens').addEventListener('input', (e) => { Tetapan.s.sens = clamp(+e.target.value || 1, 0.4, 2); $('nilaiSens').textContent = Tetapan.s.sens.toFixed(1) + '×'; Tetapan.simpan(); });
 $('btnTetapan').addEventListener('click', () => Tetapan.buka());
 $('btnTetapanTutup').addEventListener('click', () => Tetapan.tutup());
@@ -5663,7 +5926,7 @@ const Sesat = {
   // Pengawas automatik: kunci yang tertinggal lebih 1 saat (panelnya sudah tertutup) dilepaskan
   tAwas: 0,
   awas(dt) {
-    const L = State.uiLock, panel = L && { dialog: 'dialog', mini: 'mini', reward: 'ganjaran', ringkasan: 'ringkasan', senarai: 'senarai', profil: 'profil' }[L];
+    const L = State.uiLock, panel = L && { dialog: 'dialog', mini: 'mini', reward: 'ganjaran', ringkasan: 'ringkasan', senarai: 'senarai', profil: 'profil', anugerah: 'papanAnugerah' }[L];
     const basi = panel ? $(panel).hidden : (L === 'pindah' && !Rooms.busy) || (L === 'sukan' && !Sukan.aktif);
     if (L && basi) { this.tAwas += dt; if (this.tAwas > 1) { this.tAwas = 0; setLock(null); console.warn('Kunci UI tertinggal dilepaskan:', L); } } else this.tAwas = 0;
   },
@@ -5831,6 +6094,7 @@ function renderProfiles() {
       const d = all[nama] || {}; $('inNama').value = nama;
       const r = document.querySelector('input[name="watak"][value="' + (d.jantina === 'P' ? 'P' : 'L') + '"]'); if (r) r.checked = true;
       const ty = document.querySelector('input[name="tahun"][value="' + (d.tahun || 1) + '"]'); if (ty) ty.checked = true;
+      const sj = document.querySelector('input[name="subjek"][value="' + (d.subjek === 'moral' ? 'moral' : 'pi') + '"]'); if (sj) sj.checked = true;
       Menu.bacaBorang(); Menu.watakSiap();
     });
     const del = document.createElement('button'); del.className = 'btn'; del.textContent = 'Padam';
@@ -5847,6 +6111,137 @@ function showMenu() {
   if (Player.m) Player.m.group.visible = false;
   Menu.tutup(); Menu.muat(); renderProfiles(); MenuScene.pakai(); MenuScene.tunjuk(true);
 }
+/* ===================== Papan Anugerah Mingguan (dikongsi melalui Google Sheets, atau peranti ini) ===================== */
+// URL aplikasi web Google Apps Script guru (lihat BACA-SAYA.md). Kosong = papan untuk profil dalam peranti ini sahaja.
+const PAPAN_URL = 'https://script.google.com/macros/s/AKfycbyTEVpe6yexX4HUt1N9I_LuOqXsGZ8ZULfKKk5AxWz_OOvdIHFsIJRioFS98DBcBU0V/exec';
+const Anugerah = {
+  data: [], lepas: [], sumber: 'peranti', tab: 'minggu', hantarLepas: 0, memuat: false,
+  minggu(d) {
+    d = d || new Date(); const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); const day = t.getUTCDay() || 7;
+    t.setUTCDate(t.getUTCDate() + 4 - day); const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+    return t.getUTCFullYear() + '-M' + String(Math.ceil(((t - y0) / 864e5 + 1) / 7)).padStart(2, '0');
+  },
+  mingguLepas() { const d = new Date(); d.setDate(d.getDate() - 7); return this.minggu(d); },
+  julat() {
+    const d = new Date(), isn = new Date(d); isn.setDate(d.getDate() - ((d.getDay() + 6) % 7)); const ahd = new Date(isn); ahd.setDate(isn.getDate() + 6);
+    const B = ['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogo', 'Sep', 'Okt', 'Nov', 'Dis'];
+    return 'Minggu ' + this.minggu().split('-M')[1] + ' (' + isn.getDate() + ' ' + B[isn.getMonth()] + ' hingga ' + ahd.getDate() + ' ' + B[ahd.getMonth()] + ' ' + ahd.getFullYear() + ')';
+  },
+  hariIni() { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); },
+  jumlah(d) { const s = d.stats || {}; return (s.kebaikan || 0) + (s.ilmu || 0) + (s.reputasi || 0); },
+  // Kemas kini catatan mingguan profil semasa (dipanggil setiap kali disimpan)
+  catat() {
+    const d = State.data; if (!d) return;
+    const m = this.minggu(), jum = this.jumlah(d);
+    d.pemainId = d.pemainId || ('p' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36));
+    if (!d.mingguan || d.mingguan.id !== m) {
+      if (d.mingguan) d.mingguLepas = { id: d.mingguan.id, mataMinggu: Math.max(0, jum - d.mingguan.mula), hariMinggu: Object.keys(d.mingguan.hari || {}).length };
+      d.mingguan = { id: m, mula: d.mingguan ? jum : 0, hari: {} };
+    }
+    d.mingguan.hari[this.hariIni()] = 1; d.hariMain = d.hariMain || {}; d.hariMain[this.hariIni()] = 1;
+  },
+  rekod(d) {
+    const m = this.minggu(), jum = this.jumlah(d), mg = d.mingguan && d.mingguan.id === m ? d.mingguan : null, P = CONTENT.pangkat[Pangkat.indeks(jum)];
+    return { id: d.pemainId || ('n:' + d.nama), nama: d.nama, tahun: d.tahun || 1, pangkat: P.ikon + ' ' + P.nama, mata: jum, minggu: m,
+      mataMinggu: mg ? Math.max(0, jum - mg.mula) : 0, hariMinggu: mg ? Object.keys(mg.hari || {}).length : 0, hariJumlah: Object.keys(d.hariMain || {}).length };
+  },
+  hantar(paksa) {
+    if (!PAPAN_URL || !State.data || Tetapan.s.papan === false) return;
+    const now = Date.now(); if (!paksa && now - this.hantarLepas < 90000) return; this.hantarLepas = now;
+    const r = this.rekod(State.data), q = new URLSearchParams({ aksi: 'hantar' });
+    Object.keys(r).forEach((k) => q.set(k, String(r[k])));
+    try { fetch(PAPAN_URL + '?' + q.toString(), { mode: 'no-cors' }).catch(() => {}); } catch (e) {}
+  },
+  padam() {
+    const d = State.data; if (!PAPAN_URL || !d || !d.pemainId) return;
+    try { fetch(PAPAN_URL + '?aksi=padam&id=' + encodeURIComponent(d.pemainId), { mode: 'no-cors' }).catch(() => {}); } catch (e) {}
+  },
+  ambilJSON(url) {
+    const masa = new Promise((_, rej) => setTimeout(() => rej(new Error('masa')), 8000));
+    const fe = fetch(url).then((r) => r.json());
+    return Promise.race([fe, masa]).catch(() => new Promise((res, rej) => {   // sandaran JSONP
+      const cb = '__papan' + Date.now(), sc = document.createElement('script'); let siap = false;
+      window[cb] = (o) => { siap = true; delete window[cb]; sc.remove(); res(o); };
+      sc.onerror = () => { delete window[cb]; sc.remove(); rej(new Error('jsonp')); };
+      setTimeout(() => { if (!siap) { delete window[cb]; sc.remove(); rej(new Error('masa')); } }, 8000);
+      sc.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cb; document.head.appendChild(sc);
+    }));
+  },
+  async muat() {
+    if (this.memuat) return; this.memuat = true;
+    const tempatan = Object.values(Save.readAll()).filter((d) => d && d.stats && (!d.pilihan || true)).map((d) => this.rekod(d));
+    const lepasTempatan = Object.values(Save.readAll()).filter((d) => d && d.mingguLepas && d.mingguLepas.id === this.mingguLepas())
+      .map((d) => ({ nama: d.nama, tahun: d.tahun || 1, mataMinggu: d.mingguLepas.mataMinggu })).sort((a, b) => b.mataMinggu - a.mataMinggu).slice(0, 3);
+    let ok = false;
+    if (PAPAN_URL) {
+      try {
+        const r = await this.ambilJSON(PAPAN_URL + '?aksi=senarai&lepas=' + encodeURIComponent(this.mingguLepas()));
+        if (r && r.ok && Array.isArray(r.pemain)) {
+          const peta = {}; r.pemain.forEach((p) => { peta[p.id] = p; });
+          tempatan.forEach((p) => { if (peta[p.id] || Tetapan.s.papan !== false) peta[p.id] = p; });   // data peranti ini paling terkini
+          this.data = Object.values(peta); this.lepas = Array.isArray(r.lepas) ? r.lepas : []; this.sumber = 'sekolah'; ok = true;
+        }
+      } catch (e) {}
+    }
+    if (!ok) { this.data = tempatan; this.lepas = lepasTempatan; this.sumber = 'peranti'; }
+    this.memuat = false; this.lukisPapan3D();
+  },
+  susun(tab) {
+    const m = this.minggu(), D = this.data.filter((p) => p && p.nama);
+    if (tab === 'minggu') return D.filter((p) => p.minggu === m && p.mataMinggu > 0).sort((a, b) => b.mataMinggu - a.mataMinggu).map((p) => [p, '+' + p.mataMinggu + ' mata']);
+    if (tab === 'setia') return D.filter((p) => p.minggu === m && p.hariMinggu > 0).sort((a, b) => b.hariMinggu - a.hariMinggu || b.mataMinggu - a.mataMinggu).map((p) => [p, p.hariMinggu + ' hari']);
+    return D.slice().sort((a, b) => b.mata - a.mata).map((p) => [p, p.mata + ' mata']);
+  },
+  idSaya() { if (State.data && State.data.pemainId) return State.data.pemainId; const d = Menu.profil(); return d && d.pemainId; },
+  async buka() {
+    if (State.mode === 'play') { if (State.uiLock) return; if (State.paused) Pause.close(); if (Peta.aktif) Peta.tutup(); releaseInputs(); setLock('anugerah'); }
+    else Menu.tutup();
+    $('papanAnugerah').hidden = false; $('paStatus').textContent = 'Memuatkan…'; this.lukis();
+    if (State.data) { Save.save(); }
+    await this.muat(); this.lukis();
+  },
+  tutup() { if ($('papanAnugerah').hidden) return; $('papanAnugerah').hidden = true; if (State.uiLock === 'anugerah') setLock(null); },
+  lukis() {
+    $('paMinggu').textContent = this.julat();
+    $('paStatus').textContent = this.sumber === 'sekolah' ? 'Papan seluruh sekolah' : 'Papan peranti ini' + (PAPAN_URL ? ' (tiada sambungan ke papan sekolah)' : '');
+    document.querySelectorAll('#paTab button').forEach((b) => b.classList.toggle('utama', b.dataset.tab === this.tab));
+    const senarai = this.susun(this.tab), ol = $('paSenarai'); ol.innerHTML = '';
+    const saya = this.idSaya();
+    if (!senarai.length) { const li = document.createElement('li'); li.className = 'paKosong'; li.textContent = 'Belum ada nama minggu ini. Main dan kumpul mata untuk tersenarai!'; ol.appendChild(li); }
+    senarai.slice(0, 10).forEach(([p, nilai], i) => {
+      const li = document.createElement('li'); li.className = 'paBaris' + (p.id === saya ? ' saya' : '');
+      li.innerHTML = '<span class="paNo"></span><span class="paNama"></span><span class="paNilai"></span>';
+      li.querySelector('.paNo').textContent = ['🥇', '🥈', '🥉'][i] || String(i + 1);
+      li.querySelector('.paNama').textContent = p.nama + ' · Tahun ' + p.tahun + (this.tab === 'semua' ? ' · ' + (p.pangkat || '') : '');
+      li.querySelector('.paNilai').textContent = nilai; ol.appendChild(li);
+    });
+    const k = senarai.findIndex(([p]) => p.id === saya);
+    $('paSaya').textContent = saya ? (k >= 0 ? 'Kedudukan kamu: #' + (k + 1) : 'Kamu belum tersenarai dalam kategori ini.') : '';
+    $('paLepas').textContent = this.lepas.length ? 'Juara minggu lepas: ' + this.lepas.map((p, i) => ['🥇', '🥈', '🥉'][i] + ' ' + p.nama + ' (Tahun ' + p.tahun + ')').join('   ') : '';
+  },
+  // Papan kenyataan 3D di dataran pintu gerbang: tunjuk 3 teratas minggu ini
+  papan3D: null,
+  lukisPapan3D() {
+    if (!this.papan3D) return;
+    const top = this.susun('minggu').slice(0, 3);
+    const baris = [{ t: '🏆 Anugerah Mingguan', s: 34, c: '#C9571E' }, { t: this.julat().split(' (')[0], s: 22 }]
+      .concat(top.length ? top.map(([p, v], i) => ({ t: ['🥇', '🥈', '🥉'][i] + ' ' + p.nama + '  ' + v, s: 26 })) : [{ t: 'Jadilah yang pertama!', s: 26 }]);
+    this.papan3D.material.map = boardTex(baris, '#FFFDF2'); this.papan3D.material.needsUpdate = true;
+  }
+};
+$('paTutup').addEventListener('click', () => Anugerah.tutup());
+$('paMuat').addEventListener('click', async () => { $('paStatus').textContent = 'Memuatkan…'; await Anugerah.muat(); Anugerah.lukis(); });
+document.querySelectorAll('#paTab button').forEach((b) => b.addEventListener('click', () => { Anugerah.tab = b.dataset.tab; Anugerah.lukis(); }));
+$('btnAnugerah').addEventListener('click', () => Anugerah.buka());
+$('btnAnugerahJ').addEventListener('click', () => { Pause.close(); Anugerah.buka(); });
+
+/* ===================== Pendidikan Moral (murid bukan Islam) ===================== */
+const Agama = {
+  moral() { return !!(State.data && State.data.subjek === 'moral'); },
+  teks(t) { return typeof t === 'string' && this.moral() ? t.replace(/Assalamualaikum dan salam sejahtera/g, 'Salam sejahtera').replace(/Assalamualaikum/g, 'Salam sejahtera') : t; },
+  bilikPI() { Dialog.show('Bilik Pendidikan Islam', ['Ini bilik tempat rakan Muslim belajar Pendidikan Islam.', 'Kita hormati ruang ini dan semua agama, ya.'], { tag: 'Toleransi' }); }
+};
+
 /* ===================== Simpanan selamat (IndexedDB) + sandaran + PWA ===================== */
 const SimpanIDB = {
   db: null, gagal: false,
@@ -5998,7 +6393,7 @@ const MenuScene = {
   lompat(j) { const m = this.budak[j]; if (!m) return; let t = 0; const iv = setInterval(() => { t += 0.05; m.group.position.y = Math.max(0, Math.sin(t * Math.PI / 0.6) * 0.35); if (t >= 0.6) { m.group.position.y = 0; clearInterval(iv); } }, 16); }
 };
 const Menu = {
-  pilihan: { nama: '', jantina: 'L', tahun: 1, aksesori: null },
+  pilihan: { nama: '', jantina: 'L', tahun: 1, aksesori: null, subjek: 'pi' },
   KEY: 'jejakKebaikan.pilihan',
   muat() {
     try { Object.assign(this.pilihan, JSON.parse(localStorage.getItem(this.KEY) || '{}')); } catch (e) {}
@@ -6010,21 +6405,23 @@ const Menu = {
     const p = this.pilihan; $('inNama').value = p.nama || '';
     const r = document.querySelector('input[name="watak"][value="' + p.jantina + '"]'); if (r) r.checked = true;
     const t = document.querySelector('input[name="tahun"][value="' + (p.tahun || 1) + '"]'); if (t) t.checked = true;
+    const sj = document.querySelector('input[name="subjek"][value="' + (p.subjek === 'moral' ? 'moral' : 'pi') + '"]'); if (sj) sj.checked = true;
   },
   bacaBorang() {
     const p = this.pilihan;
     p.nama = ($('inNama').value || '').replace(/\s+/g, ' ').trim().slice(0, 16);
     p.jantina = (document.querySelector('input[name="watak"]:checked') || {}).value === 'P' ? 'P' : 'L';
     p.tahun = +((document.querySelector('input[name="tahun"]:checked') || {}).value || 1);
+    p.subjek = (document.querySelector('input[name="subjek"]:checked') || {}).value === 'moral' ? 'moral' : 'pi';
   },
   nota() {
     const p = this.pilihan;
-    $('mulaNota').textContent = p.nama ? (p.jantina === 'P' ? '👧 ' : '👦 ') + p.nama + ' · Tahun ' + p.tahun : 'Tekan Pilih Watak untuk menulis nama kamu.';
+    $('mulaNota').textContent = p.nama ? (p.jantina === 'P' ? '👧 ' : '👦 ') + p.nama + ' · Tahun ' + p.tahun + (p.subjek === 'moral' ? ' · Pendidikan Moral' : '') : 'Tekan Pilih Watak untuk menulis nama kamu.';
   },
   profil() { return this.pilihan.nama ? Save.load(this.pilihan.nama) : null; },
   aksesoriPilihan() { const d = this.profil(); if (d && Array.isArray(d.aksesori)) return d.aksesori; return this.pilihan.aksesori || [BEG_ASAL[this.pilihan.jantina]]; },
   buka(id) { this.tutup(); $(id).hidden = false; const b = $(id).querySelector('input, button'); if (b) b.focus({ preventScroll: true }); },
-  tutup() { document.querySelectorAll('.panelMenu').forEach((s) => { s.hidden = true; }); if (!State.paused) $('tetapan').hidden = true; },
+  tutup() { document.querySelectorAll('.panelMenu').forEach((s) => { s.hidden = true; }); if (!State.paused) $('tetapan').hidden = true; if (State.mode === 'menu') $('papanAnugerah').hidden = true; },
   mula() {
     if (!this.pilihan.nama) { this.buka('panelWatak'); $('mulaRalat').textContent = 'Tulis nama kamu dahulu.'; $('inNama').focus(); return; }
     this.isiBorang(); $('modPemain').textContent = 'Pemain: ' + $('mulaNota').textContent;
@@ -6079,10 +6476,11 @@ $('btnBebas').addEventListener('click', () => startFromForm('bebas'));
 function startGame(nama, jantina, mod, tahun) {
   Sound.init();
   $('mulaRalat').textContent = ''; Menu.tutup(); MenuScene.tunjuk(false);
-  Menu.pilihan.nama = nama; Menu.pilihan.jantina = jantina || 'L'; Menu.pilihan.tahun = tahun || 1; Menu.simpan();
+  Menu.bacaBorang(); Menu.pilihan.nama = nama; Menu.pilihan.jantina = jantina || 'L'; Menu.pilihan.tahun = tahun || 1; Menu.simpan();
   const lama = Save.load(nama);
   State.data = lama || newSave(nama, jantina || 'L', tahun);
   if (!lama) State.data.aksesori = (Menu.pilihan.aksesori || [BEG_ASAL[State.data.jantina]]).slice();
+  State.data.subjek = Menu.pilihan.subjek === 'moral' ? 'moral' : 'pi';
   if (tahun) State.data.tahun = tahun;
   Player.setLook(State.data.jantina); Player.m.group.visible = true;
   Ambient.init();
@@ -6108,7 +6506,7 @@ function startGame(nama, jantina, mod, tahun) {
   if (State.mod === 'hari') setTimeout(() => toast('Hari ke-' + State.data.hari.ke + ', jam ' + fmtJam(State.data.hari.jam)), 1800);
 }
 function toMenu() {
-  Peta.tutup();
+  Peta.tutup(); Anugerah.hantar(true);
   Save.save(); Items.clear(); releaseInputs();
   Rooms.leaveNow(); Player.lantai = null; Player.pos.y = 0; Ambient.setScape(null); Pejalan.reset();
   $('dialog').hidden = true; $('mini').hidden = true; $('ganjaran').hidden = true; $('ringkasan').hidden = true; $('senarai').hidden = true; $('profil').hidden = true; setLock(null);
@@ -6201,7 +6599,7 @@ async function boot() {
     fatal('Dunia permainan gagal dibina: ' + (e && e.message ? e.message : e)); return;
   }
   $('mulaJawi').textContent = CONTENT.sekolah.jawi; Menu.muat();
-  SimpanIDB.pulih(); PWA.init();
+  SimpanIDB.pulih(); PWA.init(); Anugerah.muat();
   $('jedaKawalan').textContent = teksKawalan();
   $('muat').hidden = true;
   showMenu();
