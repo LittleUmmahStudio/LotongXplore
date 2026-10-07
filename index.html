@@ -610,12 +610,37 @@ body.teksBesar .snLangkah,body.teksBesar .snHariItem{font-size:16px}
     <div class="kertas">
       <h2>Permainan tidak dapat dimulakan</h2>
       <p id="fatalTeks"></p>
-      <button id="btnMuatSemula" class="btn utama">Muat semula halaman</button>
+      <div class="baris-btn"><button id="btnMuatSemula" class="btn utama">Muat semula halaman</button>
+      <button id="btnBaiki" class="btn">Baiki &amp; muat semula</button></div>
     </div>
   </section>
   <pre id="debug" hidden></pre>
 </div>
 
+<script>
+// Pengawas permulaan: jika game tidak siap dalam masa 15 saat, tunjuk butang pemulihan
+(function () {
+  var ralat = [];
+  window.addEventListener('error', function (e) { ralat.push((e && e.message) || 'ralat'); });
+  setTimeout(function () {
+    var m = document.getElementById('muat'); if (!m || m.hidden) return;
+    m.innerHTML = '<div class="kertas" style="max-width:520px;text-align:center"><h2 style="margin:0 0 6px">Game lambat dimulakan</h2>' +
+      '<p style="margin:0 0 10px">Pastikan ada internet untuk pembukaan pertama, kemudian cuba lagi.</p>' +
+      (ralat.length ? '<p style="font-size:12px;opacity:.75;margin:0 0 10px">Ralat: ' + ralat.slice(0, 2).join(' | ').replace(/</g, '&lt;') + '</p>' : '') +
+      '<div class="baris-btn" style="justify-content:center"><button class="btn utama" id="pulihMuat">Muat semula</button>' +
+      '<button class="btn" id="pulihBaiki">Baiki &amp; muat semula</button></div></div>';
+    document.getElementById('pulihMuat').onclick = function () { location.reload(); };
+  }, 15000);
+  // "Baiki & muat semula": buang salinan lama (service worker & cache) kemudian muat semula. Simpanan permainan tidak terjejas.
+  document.addEventListener('click', function (e) {
+    var id = e.target && e.target.id; if (id !== 'pulihBaiki' && id !== 'btnBaiki') return;
+    var kerja = [];
+    if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) kerja.push(navigator.serviceWorker.getRegistrations().then(function (rs) { return Promise.all(rs.map(function (r) { return r.unregister(); })); }));
+    if (window.caches && caches.keys) kerja.push(caches.keys().then(function (ks) { return Promise.all(ks.map(function (k) { return caches.delete(k); })); }));
+    Promise.all(kerja).catch(function () {}).then(function () { location.reload(); });
+  });
+})();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function () {
@@ -5768,6 +5793,7 @@ renderer.setPixelRatio(Perf.pr);
 let saizLama = '';
 function resize() {
   const w = window.innerWidth, h = window.innerHeight, kunci = w + 'x' + h + '@' + renderer.getPixelRatio();
+  if (w < 2 || h < 2) return;   // saiz belum sedia (contohnya semasa skrin pembuka aplikasi)
   if (kunci === saizLama && Pasca.sz) return; saizLama = kunci;
   renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); Pasca.resize();
   const portrait = h > w && isTouch;
@@ -5775,6 +5801,10 @@ function resize() {
 }
 window.addEventListener('resize', resize);
 window.addEventListener('orientationchange', () => setTimeout(resize, 250));
+if (screen.orientation && screen.orientation.addEventListener) screen.orientation.addEventListener('change', () => setTimeout(resize, 250));
+['pageshow', 'focus'].forEach((ev) => window.addEventListener(ev, () => setTimeout(resize, 100)));
+document.addEventListener('visibilitychange', () => { if (!document.hidden) setTimeout(resize, 100); });
+setInterval(() => { const k = window.innerWidth + 'x' + window.innerHeight + '@' + renderer.getPixelRatio(); if (k !== saizLama) resize(); }, 800);
 if (window.visualViewport) window.visualViewport.addEventListener('resize', resize);
 
 document.addEventListener('visibilitychange', () => {
@@ -5916,6 +5946,11 @@ const PWA = {
      ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }], ['meta', { name: 'mobile-web-app-capable', content: 'yes' }],
      ['meta', { name: 'apple-mobile-web-app-title', content: 'LO:TONG' }]].forEach(([tag, at]) => { const el = document.createElement(tag); Object.assign(el, at); if (at.name) el.setAttribute('name', at.name); document.head.appendChild(el); });
     navigator.serviceWorker.register('sw.js').catch(() => {});
+    const dipasang = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+    if (dipasang && /Android/i.test(navigator.userAgent)) {
+      const penuh = () => { const el = document.documentElement; if (!document.fullscreenElement && el.requestFullscreen) el.requestFullscreen({ navigationUI: 'hide' }).catch(() => {}); };
+      window.addEventListener('pointerdown', penuh, { once: true });
+    }
     window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); this.tangguh = e; $('btnPasang').hidden = false; });
     window.addEventListener('appinstalled', () => { $('btnPasang').hidden = true; toast('LO:TONG telah dipasang!'); });
     $('btnPasang').addEventListener('click', async () => { if (!this.tangguh) return; this.tangguh.prompt(); try { await this.tangguh.userChoice; } catch (e) {} this.tangguh = null; $('btnPasang').hidden = true; });

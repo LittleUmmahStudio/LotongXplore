@@ -26,5 +26,11 @@ Buka game **sekali dengan internet** selepas dipasang, supaya Three.js dan fon d
 ## Mengemas kini game
 Apabila `index.html` diganti dengan versi baharu, tukar juga `VERSI` di baris atas `sw.js` (contohnya `lotong-v2`). Peranti akan memuat turun versi baharu apabila dibuka dengan internet.
 
+## Jika aplikasi Android tidak terbuka atau pegun
+1. Buang aplikasi LO:TONG lama dari skrin utama (tekan lama ikon → *Nyahpasang* / *Buang*).
+2. Buka pautan GitHub Pages dalam Chrome dan tunggu muka depan dimuatkan. Muat semula halaman sekali.
+3. Pasang semula melalui butang **📲 Pasang Game** atau menu Chrome → *Pasang aplikasi*.
+4. Jika game masih tidak bermula selepas 15 saat, skrin akan menunjukkan butang **Baiki & muat semula**. Butang ini membersihkan salinan lama dan memuat turun semula game.
+
 ## Simpanan
 Kemajuan disimpan dalam pelayar setiap peranti. Gunakan **Tetapan → Sandaran simpanan → Eksport** untuk menyalin kemajuan, dan **Import** untuk memulihkannya di peranti lain.
