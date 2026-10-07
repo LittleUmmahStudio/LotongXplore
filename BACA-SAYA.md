@@ -41,13 +41,18 @@ Tanpa langkah ini, Papan Anugerah hanya menunjukkan profil dalam peranti yang sa
    - *Laksanakan sebagai:* **Saya**
    - *Siapa yang mempunyai akses:* **Sesiapa sahaja (Anyone)**
 4. Tekan **Gunakan**, benarkan akses akaun Google, dan salin **URL aplikasi web** (berakhir dengan `/exec`).
-5. Buka `index.html`, cari baris `const PAPAN_URL = '';` dan tampal URL itu di antara tanda petikan. Contoh:
-   `const PAPAN_URL = 'https://script.google.com/macros/s/XXXX/exec';`
+5. Buka `index.html`, cari baris `const PAPAN_URL = '...';` dan tampal URL itu di antara tanda petikan. (URL Apps Script cikgu sudah dimasukkan dalam versi ini.)
 6. Muat naik `index.html` yang dikemas kini ke GitHub, dan tukar `VERSI` dalam `sw.js`.
 
 **Mengurus papan:** markah murid muncul dalam helaian **Pemain**. Untuk menyorok nama yang tidak sesuai, taip `ya` dalam lajur **sorok**. Murid juga boleh menyorok nama sendiri melalui **Tetapan → Nama di Papan Anugerah**.
 
 **Nota:** markah dihantar oleh peranti murid, jadi papan ini sesuai untuk motivasi, bukan untuk penilaian rasmi. Gunakan nama panggilan sahaja, bukan nama penuh.
+
+## Main Bersama (Geng)
+- Tekan **🤝** dalam permainan (atau **Main Bersama** di muka depan). Seorang murid tekan **Buka Geng** dan mendapat **Kod Geng** (contoh `LTG-4821`); kawan tekan **Sertai** dan masukkan 4 nombor itu. Sehingga 4 orang dalam satu geng.
+- Ketua geng memilih aktiviti: **Gotong-royong kutip sampah** atau **Cari kad huruf bersama**. Semua ahli mendapat ganjaran apabila selesai.
+- Hanya emoji dan ayat sedia boleh dihantar; tiada chat bebas.
+- Perlu internet, dan hanya berfungsi dari GitHub Pages (bukan pautan claude.ai). Jika rangkaian sekolah menyekat sambungan, cuba hotspot telefon.
 
 ## Simpanan
 Kemajuan disimpan dalam pelayar setiap peranti. Gunakan **Tetapan → Sandaran simpanan → Eksport** untuk menyalin kemajuan, dan **Import** untuk memulihkannya di peranti lain.

@@ -196,10 +196,27 @@ body.kunci #joy,body.kunci #btnAct,body.kunci #btnLari{visibility:hidden}
 .kompas i{font-style:normal;color:#E8684F;font-size:13px}.kompas b{font-size:12px}
 body.peta #objektif{display:none}
 #objektif{pointer-events:auto;cursor:pointer}
-#papanAnugerah .kertas{width:min(560px,94vw);max-height:90vh;overflow-y:auto}
-#papanAnugerah h2{margin:0}
-#paTab{flex-wrap:wrap;gap:6px;margin:6px 0}#paTab .btn{min-height:36px;padding:3px 10px;font-size:14px}
-#paSenarai{list-style:none;margin:6px 0;padding:0;display:grid;gap:5px}
+#geng .kertas{width:min(620px,95vw);max-height:92vh;overflow-y:auto}
+#geng h2{margin:0 0 4px}
+.gengPilih{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:6px 0}
+.gengPilih>div{border:3px solid #1B1B26;border-radius:6px;background:#fff;padding:8px 10px;box-shadow:3px 3px 0 #1B1B26}
+.gengSertaiBaris{display:flex;align-items:center;gap:6px}
+.gengAwalan{font-family:"Press Start 2P",monospace;font-size:13px}
+#gengInput{width:80px;font:inherit;font-size:20px;padding:4px 8px;border:3px solid #1B1B26;border-radius:6px;letter-spacing:2px}
+.gengKod{font-family:"Press Start 2P",monospace;font-size:18px;color:#C9571E}
+#gengAhli{list-style:none;padding:0;margin:4px 0;display:flex;flex-wrap:wrap;gap:6px}
+#gengAhli li{border:2px solid #1B1B26;border-radius:6px;background:#FFF4C2;padding:2px 8px;font-weight:700}
+.gengEmo{display:flex;flex-wrap:wrap;gap:6px}.gengEmo .btn,#gengAktHos .btn{min-height:36px;padding:3px 10px;font-size:14px}
+#papanAnugerah .kertas{width:min(940px,96vw);max-height:95vh;overflow-y:auto;padding:10px 16px 12px}
+#papanAnugerah h2{margin:0;font-size:20px}
+.paKepala{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.paKepala .pfSub{margin:0}
+#paTab{flex-wrap:wrap;gap:6px;margin:6px 0}#paTab .btn{min-height:34px;padding:3px 10px;font-size:14px}
+#paSenarai{list-style:none;margin:6px 0;padding:0;display:grid;gap:5px 10px}
+#paSenarai.semua{max-height:52vh;overflow-y:auto;padding-right:4px}
+.paKaki{display:flex;flex-wrap:wrap;gap:0 16px}.paKaki .pfSub{margin:2px 0}
+@media (max-height:620px){#paSenarai:not(.semua){grid-template-columns:1fr 1fr;grid-auto-flow:column;grid-template-rows:repeat(5,auto)}
+  .paBaris{padding:2px 8px !important}.paNo{font-size:16px !important}#papanAnugerah h2{font-size:17px}}
 .paBaris{display:grid;grid-template-columns:36px 1fr auto;align-items:center;gap:8px;border:3px solid #1B1B26;border-radius:6px;background:#fff;padding:4px 10px;box-shadow:3px 3px 0 #1B1B26}
 .paBaris.saya{background:#FFF4C2}
 .paNo{font-weight:700;font-size:18px;text-align:center}.paNama{font-weight:700}.paNilai{font-weight:700;color:#C9571E}
@@ -391,6 +408,7 @@ body.teksBesar .snLangkah,body.teksBesar .snHariItem{font-size:16px}
         <button id="btnJeda" class="ikon" aria-label="Jeda permainan">II</button>
         <button id="btnBunyi" class="ikon" aria-label="Bunyi" aria-pressed="true">♪</button>
         <button id="btnKamera" class="ikon" aria-label="Tukar pandangan kamera" aria-pressed="false">📷</button>
+        <button id="btnGeng" class="ikon" aria-label="Main Bersama">🤝</button>
         <button id="btnDebug" class="ikon" aria-label="Paparan debug" aria-pressed="false">DBG</button>
       </div>
     </div>
@@ -493,6 +511,7 @@ body.teksBesar .snLangkah,body.teksBesar .snHariItem{font-size:16px}
         <button id="btnSenaraiJ" class="btn">Senarai tugasan</button>
         <button id="btnProfilJ" class="btn">Profil &amp; lencana</button>
         <button id="btnAnugerahJ" class="btn">Papan Anugerah</button>
+        <button id="btnGengJ" class="btn">Main Bersama</button>
         <button id="btnPetaJ" class="btn">Lihat peta sekolah</button>
         <button id="btnSesat" class="btn">Saya sesat</button>
         <button id="btnTetapan" class="btn">Tetapan</button>
@@ -500,20 +519,45 @@ body.teksBesar .snLangkah,body.teksBesar .snHariItem{font-size:16px}
       </div>
     </div>
   </section>
+  <section id="geng" class="lapisan gelap panel-fokus" hidden role="dialog" aria-label="Main Bersama">
+    <div class="kertas">
+      <h2>🤝 Main Bersama</h2>
+      <div id="gengLuar">
+        <p class="pfSub">Main bersama sehingga 4 kawan dalam sekolah yang sama. Perlu sambungan internet.</p>
+        <div class="gengPilih">
+          <div><b>Ketua geng</b><p class="pfSub">Buka geng baharu dan kongsi Kod Geng dengan kawan.</p><button id="gengBuka" class="btn utama">🏠 Buka Geng</button></div>
+          <div><b>Ahli geng</b><p class="pfSub">Masukkan Kod Geng daripada kawan.</p>
+            <div class="gengSertaiBaris"><span class="gengAwalan">LTG-</span><input id="gengInput" inputmode="numeric" maxlength="8" placeholder="4821" autocomplete="off" aria-label="Kod Geng"><button id="gengSertai" class="btn utama">🔑 Sertai</button></div></div>
+        </div>
+      </div>
+      <div id="gengDalam" hidden>
+        <p class="pfSub">Kod Geng: <b id="gengKod" class="gengKod"></b> · kongsi kod ini dengan kawan</p>
+        <ul id="gengAhli"></ul>
+        <p class="snSub">Hantar emoji</p>
+        <div id="gengEmo" class="gengEmo"></div>
+        <p class="snSub">Aktiviti geng</p>
+        <p id="gengAktStatus" class="pfSub"></p>
+        <div id="gengAktHos" class="baris-btn"><button id="gengSampah" class="btn">🧹 Gotong-royong kutip sampah</button><button id="gengKad" class="btn">🔤 Cari kad huruf bersama</button></div>
+      </div>
+      <p id="gengStatus" class="pfSub" aria-live="polite"></p>
+      <div class="baris-btn"><button id="gengKeluar" class="btn">Keluar geng</button><button id="gengTutup" class="btn utama">Tutup</button></div>
+    </div>
+  </section>
   <section id="papanAnugerah" class="lapisan gelap panel-fokus" hidden role="dialog" aria-label="Papan Anugerah Mingguan">
     <div class="kertas">
-      <h2>🏆 Papan Anugerah Mingguan</h2>
-      <p id="paMinggu" class="pfSub"></p>
+      <div class="paKepala"><h2>🏆 Papan Anugerah Mingguan</h2><p id="paMinggu" class="pfSub"></p></div>
       <div id="paTab" class="baris-btn">
         <button class="btn" data-tab="minggu">⭐ Mata minggu ini</button>
         <button class="btn" data-tab="setia">🔥 Paling setia</button>
         <button class="btn" data-tab="semua">👑 Sepanjang masa</button>
       </div>
       <ol id="paSenarai"></ol>
-      <p id="paSaya" class="pfSub"></p>
-      <p id="paLepas" class="pfSub"></p>
-      <p id="paStatus" class="pfSub paStatus"></p>
-      <div class="baris-btn"><button id="paMuat" class="btn">Muat semula</button><button id="paTutup" class="btn utama">Tutup</button></div>
+      <div class="paKaki">
+        <p id="paSaya" class="pfSub"></p>
+        <p id="paLepas" class="pfSub"></p>
+        <p id="paStatus" class="pfSub paStatus"></p>
+      </div>
+      <div class="baris-btn"><button id="paSemua" class="btn">Lihat semua</button><button id="paMuat" class="btn">Muat semula</button><button id="paTutup" class="btn utama">Tutup</button></div>
     </div>
   </section>
   <section id="sandaran" class="lapisan gelap panel-fokus" hidden role="dialog" aria-label="Sandaran simpanan">
@@ -563,6 +607,7 @@ body.teksBesar .snLangkah,body.teksBesar .snHariItem{font-size:16px}
         <button id="btnCaraMain" class="btn">📖 Cara Main</button>
         <button id="btnAlmari" class="btn">🎒 Almari Saya</button>
         <button id="btnAnugerah" class="btn">🏆 Papan Anugerah</button>
+        <button id="btnGengMula" class="btn">🤝 Main Bersama</button>
         <button id="btnTetapanMula" class="btn">⚙️ Tetapan</button>
         <button id="btnPasang" class="btn" hidden>📲 Pasang Game</button>
       </div>
@@ -620,6 +665,7 @@ body.teksBesar .snLangkah,body.teksBesar .snHariItem{font-size:16px}
         <div><b>⭐ Mata kamu</b><p><b>Kebaikan</b>: membantu orang lain. <b>Ilmu</b>: belajar dan membaca. <b>Reputasi</b>: adab dan kepercayaan. <b>Tenaga</b>: isi semula dengan makan dan minum.</p></div>
         <div><b>🏅 Pangkat & lencana</b><p>Kumpul mata untuk naik pangkat daripada 🌱 Penolong Baru hingga 👑 Ikon Jejak Kebaikan. Dapatkan lencana dan buka aksesori di <b>Almari Saya</b>.</p></div>
         <div><b>💡 Tip</b><p>Tekan peta mini untuk melihat seluruh sekolah. Tekan kad objektif untuk senarai tugasan. Tersekat? Buka menu jeda dan pilih <b>Saya sesat</b>.</p></div>
+        <div><b>🤝 Main Bersama</b><p>Tekan 🤝 dalam permainan. Ketua geng tekan <b>Buka Geng</b> dan kongsi Kod Geng. Kawan tekan <b>Sertai</b> dan masukkan kod. Buat gotong-royong bersama dan hantar emoji!</p></div>
         <div><b>💾 Simpanan</b><p>Permainan disimpan secara automatik dalam pelayar. Buat <b>sandaran</b> di Tetapan (Eksport) supaya kemajuan tidak hilang apabila bertukar peranti.</p></div>
       </div>
       <div class="baris-btn"><button class="btn utama tutupMenu">Faham!</button></div>
@@ -877,6 +923,7 @@ const CONTENT = {
     { id: 'tandas', nama: 'Bersih & Sihat', ikon: '🧼', syarat: 'Basuh tangan selepas ke tandas', kemajuan: () => [Kiraan.bil('tandas'), 1] },
     { id: 'pentas', nama: 'Pemidato Cilik', ikon: '🎤', syarat: 'Berucap di Speaker Corner 3 kali', kemajuan: () => [Kiraan.bil('pentas'), 3] },
     { id: 'jelajah', nama: 'Penjelajah Sekolah', ikon: '🗺️', syarat: 'Masuk 12 bilik yang berbeza', kemajuan: () => [Kiraan.bil('bilik'), 12] },
+    { id: 'geng', nama: 'Geng Kebaikan', ikon: '🤝', syarat: 'Siapkan 2 aktiviti Main Bersama', kemajuan: () => [Kiraan.bil('geng'), 2] },
     { id: 'nilai', nama: 'Insan Bermoral', ikon: '🤝', syarat: 'Padankan nilai murni dengan betul 3 kali', kemajuan: () => [Kiraan.bil('nilai'), 3] },
     { agama: true, id: 'wuduk', nama: 'Wuduk Sempurna', ikon: '💧', syarat: 'Susun langkah wuduk dengan betul 3 kali', kemajuan: () => [Kiraan.bil('wuduk'), 3] },
     { agama: true, id: 'sirah', nama: 'Pencinta Sirah', ikon: '🕌', syarat: 'Susun garis masa sirah 2 kali', kemajuan: () => [Kiraan.bil('sirah'), 2] },
@@ -4513,6 +4560,8 @@ window.addEventListener('keydown', (e) => {
   if (k === '`' || e.key === 'F3') { Debug.toggle(); e.preventDefault(); return; }
   if (k === 'escape' && !$('sandaran').hidden) { Sandaran.tutup(); return; }
   if (k === 'escape' && !$('papanAnugerah').hidden) { Anugerah.tutup(); return; }
+  if (State.uiLock === 'geng') { if (k === 'escape') Geng.tutup(); return; }
+  if (k === 'g' && !State.paused && !e.repeat && State.mode === 'play' && !State.uiLock) { Geng.buka(); return; }
   if (State.uiLock === 'anugerah') return;
   if (State.mode === 'menu' && k === 'escape') { if (!$('tetapan').hidden) Tetapan.tutup(); Menu.tutup(); return; }
   if (State.mode !== 'play') return;
@@ -4616,6 +4665,7 @@ const Player = {
     const gerak = mag > 0.05;
     animLimbs(this.m, gerak ? Math.sin(this.phase) * 0.8 * Math.min(1, speed / 4) : 0); this.lengan();
     // Lompatan kecil semasa berjalan (rasa comel)
+    this.bergerak = gerak;
     this.m.inner.position.y = gerak ? Math.abs(Math.sin(this.phase)) * 0.07 * Math.min(1, speed / 4) : 0;
     Ekspresi.regang(this.m, gerak ? Math.sin(this.phase * 2) * 0.055 * Math.min(1, speed / 4) : Math.sin(State.t * 2.4) * 0.012);
     this.gembiraAnim(dt);
@@ -5167,6 +5217,7 @@ const Interact = {
           for (const it of Items.list) if (!it.room) cuba(dist2D(p, it.pos), 1.8, { kind: 'item', ref: it, verb: 'Ambil', kata: 'Ambil ' + it.label.toLowerCase() });
           for (const pb of World.papanBaca) cuba(dist2D(p, pb.pos), 1.7, { kind: 'papan', ref: pb, verb: 'Baca', kata: 'Baca papan tanda' }, -0.4);
           for (const al of World.aksiLuar) cuba(dist2D(p, al.pos), al.jarak || 1.6, { kind: 'aksiLuar', ref: al, verb: al.verb, kata: al.kata });
+          for (const gi of Geng.item()) cuba(dist2D(p, gi.mesh.position), 1.8, { kind: 'gengItem', ref: gi, verb: 'Kutip', kata: Geng.akt.jenis === 'kad' ? 'Kutip kad huruf (geng)' : 'Kutip sampah (geng)' }, 0.5);
           for (const o of World.objek) cuba(dist2D(p, o.pos), 2.2, { kind: 'objek', ref: o, verb: 'Guna', kata: 'Guna ' + o.label.toLowerCase() });
         }
         if (tanah) for (const w of Pejalan.pool) if (w.aktif) cuba(dist2D(p, w.pos), 2.0, { kind: 'pejalan', ref: w, verb: 'Cakap', kata: 'Cakap dengan Murid' });
@@ -5211,6 +5262,7 @@ function doInteract() {
   else if (c.kind === 'objek') { if (!Missions.onObjek(c.ref)) toast(c.ref.pesan || c.ref.label); }
   else if (c.kind === 'papan') Papan.baca(c.ref);
   else if (c.kind === 'aksiLuar') c.ref.fn();
+  else if (c.kind === 'gengItem') Geng.kutip(c.ref);
   else if (c.kind === 'pintu') {
     if (Izin.rumah(c.id) && !Izin.ada(c.id)) {
       State.perluIzin = true;
@@ -5264,6 +5316,7 @@ const HUD = {
     });
   },
   objective() {
+    if (typeof Geng !== 'undefined' && Geng.akt && State.mode === 'play') { $('objTajuk').textContent = '🤝 Aktiviti geng'; $('objTeks').textContent = Geng.teksAkt(); return; }
     const d = State.data; if (!d) return;
     const a = d.aktif, s = Kelas.slot(), K = Kelas.K;
     if (s && !K.siap && (Rooms.current === s.bilik || !a)) {   // sesi kelas
@@ -5651,6 +5704,8 @@ const MM = {
     for (const n of NPCs.list) if (Missions.offerFor(n.def.id)) { const q = Rooms.extPos(n.room, n.pos); c.beginPath(); c.arc(X(q.x), Z(q.z), 5, 0, Math.PI * 2); c.fill(); c.stroke(); }
     const tg = Kelas.target() || Kantin.target() || Missions.target();
     if (tg) { const q = Rooms.extPos(tg.room, tg.pos); c.fillStyle = '#FF5A36'; c.beginPath(); c.arc(X(q.x), Z(q.z), 6, 0, Math.PI * 2); c.fill(); c.strokeStyle = '#fff'; c.stroke(); }
+    if (Geng.aktif) for (const g of Object.values(Geng.ahli)) { if (g.baru) continue; const q = Rooms.extPos(g.b, { x: g.x, z: g.z }); c.fillStyle = '#58B85A'; c.strokeStyle = '#FFFFFF'; c.lineWidth = 2; c.beginPath(); c.arc(X(q.x), Z(q.z), 5, 0, Math.PI * 2); c.fill(); c.stroke(); }
+    if (Geng.akt) { c.fillStyle = '#FFCC33'; for (const it of Geng.item()) { c.beginPath(); c.arc(X(it.x), Z(it.z), 3, 0, Math.PI * 2); c.fill(); } }
     const pp = Rooms.extPos(Rooms.current, Player.pos);
     const px = X(pp.x), pz = Z(pp.z), a = Player.face;
     c.save(); c.translate(px, pz); c.rotate(Math.atan2(Math.cos(a), Math.sin(a)));
@@ -5926,7 +5981,7 @@ const Sesat = {
   // Pengawas automatik: kunci yang tertinggal lebih 1 saat (panelnya sudah tertutup) dilepaskan
   tAwas: 0,
   awas(dt) {
-    const L = State.uiLock, panel = L && { dialog: 'dialog', mini: 'mini', reward: 'ganjaran', ringkasan: 'ringkasan', senarai: 'senarai', profil: 'profil', anugerah: 'papanAnugerah' }[L];
+    const L = State.uiLock, panel = L && { dialog: 'dialog', mini: 'mini', reward: 'ganjaran', ringkasan: 'ringkasan', senarai: 'senarai', profil: 'profil', anugerah: 'papanAnugerah', geng: 'geng' }[L];
     const basi = panel ? $(panel).hidden : (L === 'pindah' && !Rooms.busy) || (L === 'sukan' && !Sukan.aktif);
     if (L && basi) { this.tAwas += dt; if (this.tAwas > 1) { this.tAwas = 0; setLock(null); console.warn('Kunci UI tertinggal dilepaskan:', L); } } else this.tAwas = 0;
   },
@@ -6115,7 +6170,7 @@ function showMenu() {
 // URL aplikasi web Google Apps Script guru (lihat BACA-SAYA.md). Kosong = papan untuk profil dalam peranti ini sahaja.
 const PAPAN_URL = 'https://script.google.com/macros/s/AKfycbyTEVpe6yexX4HUt1N9I_LuOqXsGZ8ZULfKKk5AxWz_OOvdIHFsIJRioFS98DBcBU0V/exec';
 const Anugerah = {
-  data: [], lepas: [], sumber: 'peranti', tab: 'minggu', hantarLepas: 0, memuat: false,
+  data: [], lepas: [], sumber: 'peranti', tab: 'minggu', hantarLepas: 0, memuat: false, semua: false,
   minggu(d) {
     d = d || new Date(); const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); const day = t.getUTCDay() || 7;
     t.setUTCDate(t.getUTCDate() + 4 - day); const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
@@ -6196,7 +6251,7 @@ const Anugerah = {
   async buka() {
     if (State.mode === 'play') { if (State.uiLock) return; if (State.paused) Pause.close(); if (Peta.aktif) Peta.tutup(); releaseInputs(); setLock('anugerah'); }
     else Menu.tutup();
-    $('papanAnugerah').hidden = false; $('paStatus').textContent = 'Memuatkan…'; this.lukis();
+    this.semua = false; $('papanAnugerah').hidden = false; $('paStatus').textContent = 'Memuatkan…'; this.lukis();
     if (State.data) { Save.save(); }
     await this.muat(); this.lukis();
   },
@@ -6208,7 +6263,11 @@ const Anugerah = {
     const senarai = this.susun(this.tab), ol = $('paSenarai'); ol.innerHTML = '';
     const saya = this.idSaya();
     if (!senarai.length) { const li = document.createElement('li'); li.className = 'paKosong'; li.textContent = 'Belum ada nama minggu ini. Main dan kumpul mata untuk tersenarai!'; ol.appendChild(li); }
-    senarai.slice(0, 10).forEach(([p, nilai], i) => {
+    const papar = this.semua ? senarai : senarai.slice(0, 10);
+    ol.classList.toggle('semua', this.semua);
+    $('paSemua').hidden = senarai.length <= 10 && !this.semua;
+    $('paSemua').textContent = this.semua ? '10 teratas' : 'Lihat semua (' + senarai.length + ')';
+    papar.forEach(([p, nilai], i) => {
       const li = document.createElement('li'); li.className = 'paBaris' + (p.id === saya ? ' saya' : '');
       li.innerHTML = '<span class="paNo"></span><span class="paNama"></span><span class="paNilai"></span>';
       li.querySelector('.paNo').textContent = ['🥇', '🥈', '🥉'][i] || String(i + 1);
@@ -6231,10 +6290,299 @@ const Anugerah = {
 };
 $('paTutup').addEventListener('click', () => Anugerah.tutup());
 $('paMuat').addEventListener('click', async () => { $('paStatus').textContent = 'Memuatkan…'; await Anugerah.muat(); Anugerah.lukis(); });
-document.querySelectorAll('#paTab button').forEach((b) => b.addEventListener('click', () => { Anugerah.tab = b.dataset.tab; Anugerah.lukis(); }));
+document.querySelectorAll('#paTab button').forEach((b) => b.addEventListener('click', () => { Anugerah.tab = b.dataset.tab; Anugerah.semua = false; Anugerah.lukis(); }));
+$('paSemua').addEventListener('click', () => { Anugerah.semua = !Anugerah.semua; Anugerah.lukis(); });
 $('btnAnugerah').addEventListener('click', () => Anugerah.buka());
 $('btnAnugerahJ').addEventListener('click', () => { Pause.close(); Anugerah.buka(); });
 
+/* ===================== Main Bersama (Geng): co-op melalui Kod Geng ===================== */
+// Sambungan terus antara peranti (WebRTC melalui PeerJS). Seorang "Buka Geng" (hos), kawan "Sertai Geng" dengan kod.
+// Mod ujian (?gengUjian=1): BroadcastChannel antara tab pada peranti yang sama.
+const GENG_PREFIX = 'lotong-sklotong-geng-';
+const GENG_MAKS = 4;
+const GENG_EMO = [['👋', 'Hai!'], ['🤝', 'Jom!'], ['👍', 'Bagus!'], ['🙏', 'Terima kasih!'], ['😄', 'Seronok!'], ['❤️', 'Sayang kawan!']];
+const GengSambung = {
+  ujian: /[?&]gengUjian=1/.test(location.search),
+  peer: null, conns: [], kehos: null, bc: null,
+  muatPustaka() {
+    if (window.Peer || this.ujian) return Promise.resolve(true);
+    const cuba = (src) => new Promise((res) => { const s = document.createElement('script'); s.src = src; s.onload = () => res(!!window.Peer); s.onerror = () => res(false); document.head.appendChild(s); });
+    return cuba('https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js').then((ok) => ok || cuba('https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js'));
+  },
+  // ---- Hos ----
+  hos(kod, ok, gagal) {
+    if (this.ujian) {
+      this.bc = new BroadcastChannel(GENG_PREFIX + kod);
+      this.bc.onmessage = (e) => { const d = e.data; if (d.ke !== 'hos') return; if (d.m && d.m.t === 'hai' && !this.conns.find((c) => c.id === d.dari)) this.conns.push({ id: d.dari, bc: true }); const c = this.conns.find((x) => x.id === d.dari); if (c) Geng.terima(d.m, c); };
+      setTimeout(ok, 50); return;
+    }
+    const p = new Peer(GENG_PREFIX + kod, { debug: 0 }); this.peer = p;
+    p.on('open', () => ok());
+    p.on('error', (e) => gagal(e && e.type));
+    p.on('connection', (conn) => {
+      conn.on('open', () => {
+        if (this.conns.length >= GENG_MAKS - 1) { try { conn.send({ t: 'penuh' }); } catch (e) {} setTimeout(() => conn.close(), 400); return; }
+        conn.id = conn.peer; this.conns.push(conn);
+      });
+      conn.on('data', (m) => Geng.terima(m, conn));
+      const putus = () => { this.conns = this.conns.filter((c) => c !== conn); Geng.putus(conn.id || conn.peer); };
+      conn.on('close', putus); conn.on('error', putus);
+    });
+  },
+  hantarKe(c, m) { try { if (c.bc) this.bc.postMessage({ dari: 'hos', ke: c.id, m }); else if (c.open) c.send(m); } catch (e) {} },
+  siar(m, kecuali) { this.conns.forEach((c) => { if (c.id !== kecuali) this.hantarKe(c, m); }); },
+  // ---- Ahli ----
+  sertai(kod, idSaya, ok, gagal) {
+    if (this.ujian) {
+      this.bc = new BroadcastChannel(GENG_PREFIX + kod);
+      this.bc.onmessage = (e) => { const d = e.data; if (d.dari === 'hos' && (d.ke === idSaya || d.ke === '*')) Geng.terima(d.m); };
+      this.kehos = { bc: true }; setTimeout(ok, 50); return;
+    }
+    const p = new Peer(undefined, { debug: 0 }); this.peer = p;
+    let siap = false; const tm = setTimeout(() => { if (!siap) gagal('masa'); }, 15000);
+    p.on('error', (e) => { clearTimeout(tm); if (!siap) gagal(e && e.type); });
+    p.on('open', () => {
+      const c = p.connect(GENG_PREFIX + kod, { reliable: true, serialization: 'json' }); this.kehos = c;
+      c.on('open', () => { siap = true; clearTimeout(tm); ok(); });
+      c.on('data', (m) => Geng.terima(m));
+      c.on('close', () => Geng.hosPutus()); c.on('error', () => Geng.hosPutus());
+    });
+  },
+  keHos(m) { try { if (this.kehos && this.kehos.bc) this.bc.postMessage({ dari: Geng.idSaya, ke: 'hos', m }); else if (this.kehos && this.kehos.open) this.kehos.send(m); } catch (e) {} },
+  tutup() {
+    try { if (this.bc) this.bc.close(); } catch (e) {}
+    try { this.conns.forEach((c) => { if (c.close) c.close(); }); } catch (e) {}
+    try { if (this.kehos && this.kehos.close) this.kehos.close(); } catch (e) {}
+    try { if (this.peer) this.peer.destroy(); } catch (e) {}
+    this.peer = null; this.conns = []; this.kehos = null; this.bc = null;
+  }
+};
+const Geng = {
+  aktif: false, hos: false, kod: '', idSaya: '', ahli: {}, akt: null, tHantar: 0, terakhir: '',
+  saya() { const d = State.data || {}; return { id: this.idSaya, nama: d.nama || 'Murid', jantina: d.jantina === 'P' ? 'P' : 'L', aks: (d.aksesori || []).slice(0, 4) }; },
+  // ---------- Panel ----------
+  buka() {
+    if (State.mode !== 'play') return;
+    if (State.uiLock && State.uiLock !== 'geng') return;
+    if (State.paused) Pause.close(); if (Peta.aktif) Peta.tutup();
+    releaseInputs(); setLock('geng'); $('geng').hidden = false; this.lukis();
+  },
+  tutup() { $('geng').hidden = true; if (State.uiLock === 'geng') setLock(null); },
+  status(t) { $('gengStatus').textContent = t || ''; },
+  lukis() {
+    $('gengLuar').hidden = this.aktif; $('gengDalam').hidden = !this.aktif;
+    if (!this.aktif) return;
+    $('gengKod').textContent = this.kod;
+    const ul = $('gengAhli'); ul.innerHTML = '';
+    [this.saya()].concat(Object.values(this.ahli)).forEach((a) => {
+      const li = document.createElement('li'); li.textContent = (a.jantina === 'P' ? '👧 ' : '👦 ') + a.nama + (a.id === this.idSaya ? ' (kamu)' : '') + (a.hos || (a.id === this.idSaya && this.hos) ? ' 👑' : ''); ul.appendChild(li);
+    });
+    $('gengAktHos').hidden = !this.hos;
+    $('gengAktStatus').textContent = this.akt ? this.teksAkt() : (this.hos ? 'Pilih aktiviti untuk geng kamu.' : 'Tunggu ketua geng memilih aktiviti.');
+  },
+  teksAkt() { const a = this.akt, n = a.items.filter((i) => !i.ambil).length; return (a.jenis === 'sampah' ? '🧹 Gotong-royong kutip sampah' : '🔤 Cari kad huruf bersama') + ': baki ' + n + ' daripada ' + a.items.length; },
+  kodBaru() { return 'LTG-' + String(Math.floor(1000 + Math.random() * 9000)); },
+  bersihKod(t) { const m = String(t || '').toUpperCase().replace(/[^0-9]/g, '').slice(-4); return m.length === 4 ? 'LTG-' + m : ''; },
+  // ---------- Buka / Sertai ----------
+  async bukaGeng(cubaan) {
+    cubaan = cubaan || 0; this.status('Menyambung…');
+    if (!(await GengSambung.muatPustaka())) { this.status('Main Bersama memerlukan internet. Semak sambungan dan cuba lagi.'); return; }
+    const kod = this.kodBaru(); this.idSaya = 'hos';
+    GengSambung.hos(kod.slice(4), () => { this.aktif = true; this.hos = true; this.kod = kod; this.ahli = {}; this.status(''); this.lukis(); toast('Geng dibuka! Kongsi kod ' + kod + ' dengan kawan.'); Sound.play('ok'); },
+      (jenis) => { GengSambung.tutup(); if (jenis === 'unavailable-id' && cubaan < 3) this.bukaGeng(cubaan + 1); else this.status('Tidak dapat membuka geng (' + (jenis || 'ralat') + '). Cuba lagi.'); });
+  },
+  async sertaiGeng() {
+    const kod = this.bersihKod($('gengInput').value);
+    if (!kod) { this.status('Masukkan 4 nombor Kod Geng, contohnya 4821.'); return; }
+    this.status('Menyambung ke geng ' + kod + '…');
+    if (!(await GengSambung.muatPustaka())) { this.status('Main Bersama memerlukan internet. Semak sambungan dan cuba lagi.'); return; }
+    this.idSaya = 'm' + Math.random().toString(36).slice(2, 9);
+    GengSambung.sertai(kod.slice(4), this.idSaya, () => { this.kod = kod; GengSambung.keHos(Object.assign({ t: 'hai' }, this.saya())); this.status('Menunggu ketua geng…'); },
+      (jenis) => { GengSambung.tutup(); this.status(jenis === 'peer-unavailable' ? 'Kod ' + kod + ' tidak dijumpai. Semak semula kod dengan kawan.' : 'Tidak dapat menyambung. Pastikan ada internet dan cuba lagi.'); });
+  },
+  keluar(senyap) {
+    if (!this.aktif && !GengSambung.peer && !GengSambung.bc) return;
+    if (this.hos) GengSambung.siar({ t: 'tamat' }); else GengSambung.keHos({ t: 'keluar', id: this.idSaya });
+    setTimeout(() => GengSambung.tutup(), 200);
+    Object.keys(this.ahli).forEach((id) => this.buangAvatar(id)); this.ahli = {}; this.tamatAkt(); this.aktif = false; this.hos = false; this.kod = '';
+    if (!senyap) { toast('Kamu keluar daripada geng.'); this.lukis(); }
+  },
+  // ---------- Mesej ----------
+  terima(m, c) {
+    if (!m || typeof m !== 'object') return;
+    if (this.hos) {
+      const id = c && c.id;
+      if (m.t === 'hai') {
+        if (Object.keys(this.ahli).length >= GENG_MAKS - 1) { GengSambung.hantarKe(c, { t: 'penuh' }); return; }
+        this.tambahAhli({ id, nama: String(m.nama || 'Kawan').slice(0, 16), jantina: m.jantina === 'P' ? 'P' : 'L', aks: Array.isArray(m.aks) ? m.aks.slice(0, 4) : [] });
+        GengSambung.hantarKe(c, { t: 'selamat', id, kod: this.kod, ahli: [Object.assign({ hos: true }, this.saya())].concat(Object.values(this.ahli).map((a) => this.ringkas(a))), akt: this.akt && this.ringkasAkt() });
+        GengSambung.siar({ t: 'ahli', ahli: [Object.assign({ hos: true }, this.saya())].concat(Object.values(this.ahli).map((a) => this.ringkas(a))) }, id);
+        toast('🤝 ' + this.ahli[id].nama + ' menyertai geng!'); Sound.play('ok'); this.lukis(); return;
+      }
+      if (!this.ahli[id]) return;
+      if (m.t === 'pos') { this.posAhli(id, m); GengSambung.siar(Object.assign({}, m, { id }), id); return; }
+      if (m.t === 'emo') { this.emoAhli(id, m.k); GengSambung.siar({ t: 'emo', id, k: m.k }, id); return; }
+      if (m.t === 'kutip') { this.sahKutip(m.i, id); return; }
+      if (m.t === 'keluar') { this.putus(id); return; }
+      return;
+    }
+    // ahli biasa
+    if (m.t === 'penuh') { this.status('Geng ini sudah penuh (' + GENG_MAKS + ' orang).'); GengSambung.tutup(); return; }
+    if (m.t === 'selamat') {
+      this.aktif = true; this.hos = false; this.idSaya = m.id; this.kod = m.kod || this.kod; this.status('');
+      this.setAhli(m.ahli); if (m.akt) this.mulaAkt(m.akt, true);
+      toast('🤝 Kamu menyertai geng ' + this.kod + '!'); Sound.play('ok'); this.lukis(); return;
+    }
+    if (m.t === 'ahli') { this.setAhli(m.ahli); this.lukis(); return; }
+    if (m.t === 'pos' && m.id !== this.idSaya && this.ahli[m.id]) { this.posAhli(m.id, m); return; }
+    if (m.t === 'emo' && m.id !== this.idSaya) { this.emoAhli(m.id, m.k); return; }
+    if (m.t === 'akt') { this.mulaAkt(m.akt); return; }
+    if (m.t === 'kutipOK') { this.tandaKutip(m.i, m.id, m.nama); return; }
+    if (m.t === 'aktTamat') { this.akhirAkt(m); return; }
+    if (m.t === 'tamat') { this.hosPutus(); return; }
+  },
+  ringkas(a) { return { id: a.id, nama: a.nama, jantina: a.jantina, aks: a.aks || [], hos: !!a.hos }; },
+  setAhli(senarai) {
+    const ada = {};
+    (senarai || []).forEach((a) => { if (a.id === this.idSaya) return; ada[a.id] = 1; if (!this.ahli[a.id]) this.tambahAhli(a); else this.ahli[a.id].hos = !!a.hos; });
+    Object.keys(this.ahli).forEach((id) => { if (!ada[id]) { toast('👋 ' + this.ahli[id].nama + ' keluar daripada geng.'); this.buangAvatar(id); delete this.ahli[id]; } });
+  },
+  tambahAhli(a) {
+    const m = makeHuman(RUPA_PEMAIN[a.jantina === 'P' ? 'P' : 'L']);
+    (a.aks || []).forEach((id) => { if (CONTENT.aksesori.some((x) => x.id === id)) m.inner.add(Aksesori.bina(id, a.jantina === 'P')); });
+    const lab = textSprite(a.nama); lab.position.y = 2.05; m.group.add(lab);
+    m.group.visible = false; scene.add(m.group);
+    this.ahli[a.id] = Object.assign({ m, lab, x: 0, y: 0, z: 0, f: 0, sx: 0, sy: 0, sz: 0, sf: 0, b: null, g: false, baru: true, fasa: 0, emo: null }, a);
+  },
+  buangAvatar(id) { const a = this.ahli[id]; if (a && a.m) scene.remove(a.m.group); },
+  putus(id) {
+    const a = this.ahli[id]; if (!a) return;
+    toast('👋 ' + a.nama + ' keluar daripada geng.'); this.buangAvatar(id); delete this.ahli[id];
+    if (this.hos) GengSambung.siar({ t: 'ahli', ahli: [Object.assign({ hos: true }, this.saya())].concat(Object.values(this.ahli).map((x) => this.ringkas(x))) });
+    this.lukis();
+  },
+  hosPutus() { if (!this.aktif && !GengSambung.kehos) return; toast('Geng telah tamat. Ketua geng telah keluar.'); this.keluar(true); this.lukis(); },
+  posAhli(id, m) {
+    const a = this.ahli[id]; if (!a) return;
+    a.sx = +m.x || 0; a.sy = +m.y || 0; a.sz = +m.z || 0; a.sf = +m.f || 0; a.b = m.b || null; a.g = !!m.g;
+    if (a.baru) { a.x = a.sx; a.y = a.sy; a.z = a.sz; a.f = a.sf; a.baru = false; }
+  },
+  // ---------- Kemas kini setiap bingkai ----------
+  update(dt) {
+    if (!this.aktif) return;
+    // hantar kedudukan sendiri
+    this.tHantar -= dt;
+    if (this.tHantar <= 0 && Player.m) {
+      const m = { t: 'pos', id: this.idSaya, x: +Player.pos.x.toFixed(2), y: +(Player.pos.y || 0).toFixed(2), z: +Player.pos.z.toFixed(2), f: +(Player.face || 0).toFixed(2), b: Rooms.current || null, g: !!Player.bergerak };
+      const k = JSON.stringify(m);
+      if (k !== this.terakhir || this.tHantar < -1) { this.terakhir = k; if (this.hos) GengSambung.siar(m); else GengSambung.keHos(m); this.tHantar = 0.12; }
+    }
+    // gerakkan avatar kawan dengan lancar
+    const k = 1 - Math.exp(-dt * 10);
+    for (const a of Object.values(this.ahli)) {
+      a.x += (a.sx - a.x) * k; a.y += (a.sy - a.y) * k; a.z += (a.sz - a.z) * k;
+      let df = a.sf - a.f; while (df > Math.PI) df -= Math.PI * 2; while (df < -Math.PI) df += Math.PI * 2; a.f += df * k;
+      a.m.group.position.set(a.x, a.y, a.z); a.m.group.rotation.y = a.f;
+      a.m.group.visible = State.mode === 'play' && !a.baru && (a.b || null) === (Rooms.current || null);
+      const jalan = Math.hypot(a.sx - a.x, a.sz - a.z) > 0.03 || a.g;
+      if (jalan) a.fasa += dt * 9; animLimbs(a.m, jalan ? Math.sin(a.fasa) * 0.7 : 0);
+      a.m.inner.position.y = jalan ? Math.abs(Math.sin(a.fasa)) * 0.05 : 0;
+      if (a.emo) { a.emo.t -= dt; if (a.emo.t <= 0) { a.m.group.remove(a.emo.sp); a.emo = null; } }
+    }
+    if (this.akt) for (const it of this.akt.items) if (it.mesh && !it.ambil) { it.mesh.rotation.y += dt * 1.6; it.mesh.position.y = (it.y || 0) + 0.15 + Math.sin(State.t * 3 + it.x) * 0.06; }
+    if (this.emoSaya) { this.emoSaya.t -= dt; if (this.emoSaya.t <= 0) { if (Player.m) Player.m.group.remove(this.emoSaya.sp); this.emoSaya = null; } }
+  },
+  // ---------- Emoji ----------
+  emo(k) {
+    if (!this.aktif || !GENG_EMO[k]) return;
+    const [e, t] = GENG_EMO[k];
+    if (this.emoSaya && Player.m) Player.m.group.remove(this.emoSaya.sp);
+    const sp = textSprite(e + ' ' + t); sp.position.y = 2.5; if (Player.m) Player.m.group.add(sp); this.emoSaya = { sp, t: 3 };
+    const m = { t: 'emo', id: this.idSaya, k }; if (this.hos) GengSambung.siar(m); else GengSambung.keHos(m);
+    Sound.play('talk');
+  },
+  emoAhli(id, k) {
+    const a = this.ahli[id]; if (!a || !GENG_EMO[k]) return;
+    if (a.emo) a.m.group.remove(a.emo.sp);
+    const sp = textSprite(GENG_EMO[k][0] + ' ' + GENG_EMO[k][1]); sp.position.y = 2.5; a.m.group.add(sp); a.emo = { sp, t: 3 };
+    toast(a.nama + ': ' + GENG_EMO[k][0] + ' ' + GENG_EMO[k][1]);
+  },
+  // ---------- Aktiviti geng (dikawal oleh ketua geng) ----------
+  pilihAkt(jenis) {
+    if (!this.hos || !this.aktif) return;
+    if (this.akt) { this.status('Siapkan aktiviti semasa dahulu.'); return; }
+    let items, kata = null;
+    if (jenis === 'sampah') items = shuffle(CONTENT.titikRawak.sampah.slice()).slice(0, 8).map((p) => ({ x: p[0], z: p[1], y: 0 }));
+    else {
+      kata = Math.floor(Math.random() * CONTENT.binaKata.length);
+      const H = Array.from(CONTENT.binaKata[kata].j);
+      items = shuffle(CONTENT.titikRawak.kad.slice()).slice(0, H.length).map((p, i) => ({ x: p[0], z: p[1], y: 0.6, h: H[i] }));
+    }
+    const akt = { jenis, kata, items: items.map((i) => Object.assign({ ambil: null }, i)) };
+    this.mulaAkt(akt); GengSambung.siar({ t: 'akt', akt: this.ringkasAkt() }); this.tutup();
+  },
+  ringkasAkt() { const a = this.akt; return a && { jenis: a.jenis, kata: a.kata, items: a.items.map((i) => ({ x: i.x, z: i.z, y: i.y, h: i.h, ambil: i.ambil })) }; },
+  mulaAkt(akt, senyap) {
+    this.tamatAkt();
+    this.akt = { jenis: akt.jenis, kata: akt.kata, items: akt.items.map((i) => Object.assign({}, i)), kutipSaya: 0 };
+    this.akt.items.forEach((it) => {
+      if (it.ambil) return;
+      const g = new THREE.Group(); g.add(akt.jenis === 'sampah' ? ITEM.sampah.make() : ITEM.kad.make(it.h)); g.position.set(it.x, it.y || 0, it.z); scene.add(g); it.mesh = g;
+    });
+    if (!senyap) { toast(akt.jenis === 'sampah' ? '🧹 Gotong-royong! Kutip semua sampah bersama geng.' : '🔤 Cari semua kad huruf bersama geng!'); Sound.play('ok'); }
+    HUD.objective(); this.lukis();
+  },
+  tamatAkt() { if (this.akt) this.akt.items.forEach((it) => { if (it.mesh) scene.remove(it.mesh); }); this.akt = null; HUD.objective(); },
+  item() { return this.akt ? this.akt.items.filter((i) => !i.ambil && i.mesh) : []; },
+  kutip(it) {
+    if (!this.akt || it.ambil) return;
+    const i = this.akt.items.indexOf(it);
+    if (this.hos) this.sahKutip(i, this.idSaya); else { GengSambung.keHos({ t: 'kutip', i }); this.tandaKutip(i, this.idSaya, (State.data || {}).nama); }
+  },
+  sahKutip(i, id) {
+    const it = this.akt && this.akt.items[i]; if (!it || it.ambil) return;
+    const nama = id === this.idSaya ? (State.data || {}).nama : (this.ahli[id] || {}).nama;
+    this.tandaKutip(i, id, nama); GengSambung.siar({ t: 'kutipOK', i, id, nama });
+    if (this.akt.items.every((x) => x.ambil)) {
+      const kira = {}; this.akt.items.forEach((x) => { kira[x.ambil] = (kira[x.ambil] || 0) + 1; });
+      const m = { t: 'aktTamat', jenis: this.akt.jenis, kata: this.akt.kata, kira };
+      GengSambung.siar(m); this.akhirAkt(m);
+    }
+  },
+  tandaKutip(i, id, nama) {
+    const it = this.akt && this.akt.items[i]; if (!it || it.ambil) return;
+    it.ambil = id; if (it.mesh) { Kesan.letup(it.mesh.position, '#FFD84D', 6, 0.3); scene.remove(it.mesh); it.mesh = null; }
+    Sound.play('pick');
+    if (id === this.idSaya) { this.akt.kutipSaya++; toast(this.akt.jenis === 'kad' ? 'Kad huruf ' + it.h + ' dijumpai!' : 'Sampah dikutip!'); }
+    else toast('🤝 ' + (nama || 'Kawan') + (this.akt.jenis === 'kad' ? ' menjumpai kad ' + it.h : ' mengutip sampah') + '!');
+    if (this.akt.jenis === 'kad' && id === this.idSaya && State.data) { State.data.kadJawi = State.data.kadJawi || {}; State.data.kadJawi[it.h] = true; }
+    HUD.objective(); this.lukis();
+  },
+  akhirAkt(m) {
+    if (!this.akt) return;
+    const saya = (m.kira && m.kira[this.idSaya]) || 0, d = State.data;
+    const g = m.jenis === 'sampah' ? { kebaikan: 3 + saya } : { ilmu: 3 + saya };
+    if (d) { ['kebaikan', 'ilmu'].forEach((k) => { d.stats[k] += g[k] || 0; }); HUD.stats(g); Kiraan.tambah('geng'); }
+    Player.gembira = 0.9; Sound.play('done'); Kesan.letup(Player.pos, '#FFCC33', 16, 1.6);
+    const w = m.jenis === 'kad' && CONTENT.binaKata[m.kata];
+    Dialog.show('Geng berjaya! 🤝', (m.jenis === 'sampah' ? ['Kawasan sekolah bersih hasil gotong-royong geng kamu!', 'Kamu mengutip ' + saya + ' sampah.']
+      : ['Semua kad huruf dijumpai! Perkataannya: ' + w.j + ' (' + w.r + ').', 'Kamu menjumpai ' + saya + ' kad.']).concat(['Bekerjasama menjadikan kerja lebih ringan.']), { tag: '+' + (g.kebaikan || g.ilmu) + (g.kebaikan ? ' Kebaikan' : ' Ilmu') });
+    this.tamatAkt(); Save.save(); this.lukis();
+  }
+};
+$('btnGeng').addEventListener('click', (e) => { e.currentTarget.blur(); Geng.buka(); });
+$('gengTutup').addEventListener('click', () => Geng.tutup());
+$('gengBuka').addEventListener('click', () => Geng.bukaGeng());
+$('gengSertai').addEventListener('click', () => Geng.sertaiGeng());
+$('gengInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); Geng.sertaiGeng(); } });
+$('gengKeluar').addEventListener('click', () => Geng.keluar());
+$('gengSampah').addEventListener('click', () => Geng.pilihAkt('sampah'));
+$('gengKad').addEventListener('click', () => Geng.pilihAkt('kad'));
+(() => { const box = $('gengEmo'); GENG_EMO.forEach(([e, t], k) => { const b = document.createElement('button'); b.className = 'btn'; b.textContent = e + ' ' + t; b.addEventListener('click', () => { Geng.emo(k); Geng.tutup(); }); box.appendChild(b); }); })();
+
+$('btnGengJ').addEventListener('click', () => { Pause.close(); Geng.buka(); });
+$('btnGengMula').addEventListener('click', () => { if (!Menu.pilihan.nama) { Menu.mula(); return; } Menu.isiBorang(); startFromForm('bebas'); setTimeout(() => Geng.buka(), 700); });
+window.addEventListener('pagehide', () => { try { Geng.keluar(true); } catch (e) {} });
 /* ===================== Pendidikan Moral (murid bukan Islam) ===================== */
 const Agama = {
   moral() { return !!(State.data && State.data.subjek === 'moral'); },
@@ -6506,7 +6854,7 @@ function startGame(nama, jantina, mod, tahun) {
   if (State.mod === 'hari') setTimeout(() => toast('Hari ke-' + State.data.hari.ke + ', jam ' + fmtJam(State.data.hari.jam)), 1800);
 }
 function toMenu() {
-  Peta.tutup(); Anugerah.hantar(true);
+  Peta.tutup(); Anugerah.hantar(true); Geng.keluar(true);
   Save.save(); Items.clear(); releaseInputs();
   Rooms.leaveNow(); Player.lantai = null; Player.pos.y = 0; Ambient.setScape(null); Pejalan.reset();
   $('dialog').hidden = true; $('mini').hidden = true; $('ganjaran').hidden = true; $('ringkasan').hidden = true; $('senarai').hidden = true; $('profil').hidden = true; setLock(null);
@@ -6539,7 +6887,7 @@ function laporRalat(e) {
 function kemaskiniBingkai(dt) {
   Perf.tick(dt); State.t += dt; World.kibar(State.t);
   if (State.mode === 'play') {
-    Sesat.awas(dt);
+    Sesat.awas(dt); Geng.update(dt);
     Kemajuan.acc += dt;
     if (Kemajuan.acc > 1) { Kemajuan.acc = 0; Lencana.semak(); Pangkat.semak(); HUD.pangkat(); if (Player.m !== Aksesori.mLast) Aksesori.pasang(); }
   }
